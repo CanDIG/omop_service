@@ -17,7 +17,7 @@ from django.db import models
 #         db_table = 'attribute_definition'
 
 
-# related name is class name + '__' + field name
+# related name is class name + '_' + field name
 
 
 # Clinical Data Tables
@@ -30,29 +30,29 @@ class Person(models.Model):
     """
     person_id = models.CharField(unique=True, max_length=200)
     gender_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                       related_name='person__gender_concept')
+                                       related_name='person_gender_concept')
     year_of_birth = models.IntegerField(blank=True, null=True)
     month_of_birth = models.IntegerField(blank=True, null=True)
     day_of_birth = models.IntegerField(blank=True, null=True)
     birth_datetime = models.DateTimeField(blank=True, null=True)
     death_datetime = models.DateTimeField(blank=True, null=True)
     race_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                     related_name='person__race_concept')
+                                     related_name='person_race_concept')
     ethnicity_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                          related_name='person__ethnicity_concept')
+                                          related_name='person_ethnicity_concept')
     location = models.ForeignKey("Location", on_delete=models.SET_NULL, blank=True, null=True)
     provider = models.ForeignKey("Provider", on_delete=models.SET_NULL, blank=True, null=True)
     care_site = models.ForeignKey("CareSite", on_delete=models.SET_NULL, blank=True, null=True)
     person_source_value = models.CharField(max_length=200, blank=True)
     gender_source_value = models.CharField(max_length=200, blank=True)
     gender_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                              related_name='person__gender_source_concept')
+                                              related_name='person_gender_source_concept')
     race_source_value = models.CharField(max_length=200, blank=True)
     race_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                            related_name='person__race_source_concept')
+                                            related_name='person_race_source_concept')
     ethnicity_source_value = models.CharField(max_length=200, blank=True)
     ethnicity_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                 related_name='person__ethnicity_source_concept')
+                                                 related_name='person_ethnicity_source_concept')
 
     def __str__(self):
         return str(self.person_id)
@@ -82,24 +82,24 @@ class VisitOccurrence(models.Model):
     visit_occurrence_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey(Person, models.CASCADE)
     visit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                      related_name='visit_occurrence__visit_concept')
+                                      related_name='visit_occurrence_visit_concept')
     visit_start_date = models.DateField(blank=True, null=True)
     visit_start_datetime = models.DateTimeField(blank=True, null=True)
     visit_end_date = models.DateField(blank=True, null=True)
     visit_end_datetime = models.DateTimeField(blank=True, null=True)
     visit_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                           related_name='visit_occurrence__visit_type_concept')
+                                           related_name='visit_occurrence_visit_type_concept')
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
     care_site = models.ForeignKey('CareSite', on_delete=models.SET_NULL, blank=True, null=True)
     visit_source_value = models.CharField(max_length=200, blank=True)
     visit_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                             related_name='visit_occurrence__visit_source_concept')
+                                             related_name='visit_occurrence_visit_source_concept')
     admitted_from_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                              related_name='visit_occurrence__admitted_from_concept')
+                                              related_name='visit_occurrence_admitted_from_concept')
     admitted_from_source_value = models.CharField(max_length=200, blank=True)
     discharge_to_source_value = models.CharField(max_length=200, blank=True)
     discharge_to_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                             related_name='visit_occurrence__discharge_to_concept')
+                                             related_name='visit_occurrence_discharge_to_concept')
     preceding_visit_occurrence = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
@@ -114,26 +114,28 @@ class VisitDetail(models.Model):
     visit_detail_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey(Person, models.CASCADE)
     visit_detail_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                             related_name='visit_detail__visit_detail_concept')
+                                             related_name='visit_detail_visit_detail_concept')
     visit_detail_start_date = models.DateField(blank=True, null=True)
     visit_detail_start_datetime = models.DateTimeField(blank=True, null=True)
     visit_detail_end_date = models.DateField(blank=True, null=True)
     visit_detail_end_datetime = models.DateTimeField(blank=True, null=True)
     visit_detail_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                  related_name='visit_detail__visit_detail_type_concept')
+                                                  related_name='visit_detail_visit_detail_type_concept')
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
     care_site = models.ForeignKey('CareSite', on_delete=models.SET_NULL, blank=True, null=True)
     discharge_to_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                             related_name='visit_detail__discharge_to_concept')
+                                             related_name='visit_detail_discharge_to_concept')
     admitted_from_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                              related_name='visit_detail__admitted_from_concept')
+                                              related_name='visit_detail_admitted_from_concept')
     admitted_from_source_value = models.CharField(max_length=200, blank=True)
     visit_detail_source_value = models.CharField(max_length=200, blank=True)
     visit_detail_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                    related_name='visit_detail__visit_detail_source_concept')
+                                                    related_name='visit_detail_visit_detail_source_concept')
     discharge_to_source_value = models.CharField(max_length=200, blank=True)
-    preceding_visit_detail = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
-    visit_detail_parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True)
+    preceding_visit_detail = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True,
+                                               related_name='visit_detail_visit_detail_preceding_visit_detail')
+    visit_detail_parent = models.ForeignKey('self', on_delete=models.SET_NULL, blank=True, null=True,
+                                            related_name='visit_detail_visit_detail_visit_detail_parent')
     visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
@@ -149,24 +151,24 @@ class ConditionOccurrence(models.Model):
     condition_occurrence_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     condition_concept = models.ForeignKey('Concept', models.SET_NULL, blank=True, null=True,
-                                          related_name='condition_occurrence__condition_concept')
+                                          related_name='condition_occurrence_condition_concept')
     condition_start_date = models.DateField(blank=True, null=True)
     condition_start_datetime = models.DateTimeField(blank=True, null=True)
     condition_end_date = models.DateField(blank=True, null=True)
     condition_end_datetime = models.DateTimeField(blank=True, null=True)
     condition_type_concept = models.ForeignKey('Concept', models.SET_NULL, blank=True, null=True,
-                                               related_name='condition_occurrence__condition_type_concept')
+                                               related_name='condition_occurrence_condition_type_concept')
     condition_status_concept = models.ForeignKey('Concept', models.SET_NULL, blank=True, null=True,
-                                                 related_name='condition_occurrence__condition_status_concept')
+                                                 related_name='condition_occurrence_condition_status_concept')
     stop_reason = models.CharField(max_length=20, blank=True)
     provider = models.ForeignKey('Provider', models.SET_NULL, blank=True, null=True)
     visit_occurrence = models.ForeignKey('VisitOccurrence', models.SET_NULL, blank=True, null=True,
-                                         related_name='condition_occurrence__visit_occurrence')
+                                         related_name='condition_occurrence_visit_occurrence')
     visit_detail = models.ForeignKey('VisitDetail', models.SET_NULL, blank=True, null=True,
-                                     related_name='condition_occurrence__visit_detail')
+                                     related_name='condition_occurrence_visit_detail')
     condition_source_value = models.CharField(max_length=50, blank=True)
     condition_source_concept = models.ForeignKey('Concept', models.SET_NULL, blank=True, null=True,
-                                                 related_name='condition_occurrence__condition_source_concept')
+                                                 related_name='condition_occurrence_condition_source_concept')
     condition_status_source_value = models.CharField(max_length=50, blank=True)
 
     def __str__(self):
@@ -182,28 +184,28 @@ class DrugExposure(models.Model):
     drug_exposure_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     drug_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                     related_name='drug_exposure__drug_concept')
+                                     related_name='drug_exposure_drug_concept')
     drug_exposure_start_date = models.DateField(blank=True, null=True)
     drug_exposure_start_datetime = models.DateTimeField(blank=True, null=True)
     drug_exposure_end_date = models.DateField(blank=True, null=True)
     drug_exposure_end_datetime = models.DateTimeField(blank=True, null=True)
     verbatim_end_date = models.DateField(blank=True, null=True)
     drug_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                          related_name='drug_exposure__drug_type_concept')
+                                          related_name='drug_exposure_drug_type_concept')
     stop_reason = models.CharField(max_length=200, blank=True)
     refills = models.IntegerField(blank=True, null=True)
     quantity = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     days_supply = models.IntegerField(blank=True, null=True)
     sig = models.TextField(blank=True, null=True)
     route_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                      related_name='drug_exposure__route_concept')
+                                      related_name='drug_exposure_route_concept')
     lot_number = models.CharField(max_length=200, blank=True)
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
     visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True)
     visit_detail = models.ForeignKey('VisitDetail', on_delete=models.SET_NULL, blank=True, null=True)
     drug_source_value = models.CharField(max_length=200, blank=True)
     drug_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                            related_name='drug_exposure__drug_source_concept')
+                                            related_name='drug_exposure_drug_source_concept')
     route_source_value = models.CharField(max_length=200, blank=True)
     dose_unit_source_value = models.CharField(max_length=200, blank=True)
 
@@ -220,20 +222,20 @@ class ProcedureOccurrence(models.Model):
     procedure_occurrence_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey(Person, models.CASCADE)
     procedure_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                          related_name='procedure_occurrence__procedure_concept')
+                                          related_name='procedure_occurrence_procedure_concept')
     procedure_date = models.DateField(blank=True, null=True)
     procedure_datetime = models.DateTimeField(blank=True, null=True)
     procedure_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                               related_name='procedure_occurrence__procedure_type_concept')
+                                               related_name='procedure_occurrence_procedure_type_concept')
     modifier_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                         related_name='procedure_occurrence__modifier_concept')
+                                         related_name='procedure_occurrence_modifier_concept')
     quantity = models.IntegerField(blank=True, null=True)
     provider = models.ForeignKey('Provider', models.SET_NULL, blank=True, null=True)
     visit_occurrence = models.ForeignKey('VisitOccurrence', models.SET_NULL, blank=True, null=True)
     visit_detail = models.ForeignKey('VisitDetail', models.SET_NULL, blank=True, null=True)
     procedure_source_value = models.CharField(max_length=200, blank=True)
     procedure_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                 related_name='procedure_occurrence__procedure_source_concept')
+                                                 related_name='procedure_occurrence_procedure_source_concept')
     modifier_source_value = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
@@ -249,13 +251,13 @@ class DeviceExposure(models.Model):
     device_exposure_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     device_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                       related_name='device_exposure__device_concept')
+                                       related_name='device_exposure_device_concept')
     device_exposure_start_date = models.DateField(blank=True, null=True)
     device_exposure_start_datetime = models.DateTimeField(blank=True, null=True)
     device_exposure_end_date = models.DateField(blank=True, null=True)
     device_exposure_end_datetime = models.DateTimeField(blank=True, null=True)
     device_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                            related_name='device_exposure__device_type_concept')
+                                            related_name='device_exposure_device_type_concept')
     unique_device_id = models.CharField(max_length=200, blank=True)
     quantity = models.IntegerField(blank=True, null=True)
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
@@ -263,7 +265,7 @@ class DeviceExposure(models.Model):
     visit_detail = models.ForeignKey('VisitDetail', on_delete=models.SET_NULL, blank=True, null=True)
     device_source_value = models.CharField(max_length=200, blank=True)
     device_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                              related_name='device_exposure__device_source_concept')
+                                              related_name='device_exposure_device_source_concept')
 
     def __str__(self):
         return str(self.device_exposure_id)
@@ -278,18 +280,18 @@ class Measurement(models.Model):
     measurement_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     measurement_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                            related_name='measurement__measurement_concept')
+                                            related_name='measurement_measurement_concept')
     measurement_date = models.DateField(blank=True, null=True)
     measurement_datetime = models.DateTimeField(blank=True, null=True)
     measurement_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                 related_name='measurement__measurement_type_concept')
+                                                 related_name='measurement_measurement_type_concept')
     operator_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                         related_name='measurement__operator_concept')
+                                         related_name='measurement_operator_concept')
     value_as_number = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     value_as_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                         related_name='measurement__value_as_concept')
+                                         related_name='measurement_value_as_concept')
     unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                     related_name='measurement__unit_concept')
+                                     related_name='measurement_unit_concept')
     range_low = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     range_high = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
@@ -297,7 +299,7 @@ class Measurement(models.Model):
     visit_detail = models.ForeignKey('VisitDetail', on_delete=models.SET_NULL, blank=True, null=True)
     measurement_source_value = models.CharField(max_length=200, blank=True)
     measurement_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                   related_name='measurement__measurement_source_concept')
+                                                   related_name='measurement_measurement_source_concept')
     unit_source_value = models.CharField(max_length=200, blank=True)
     value_source_value = models.CharField(max_length=200, blank=True)
 
@@ -313,30 +315,30 @@ class Observation(models.Model):
     observation_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     observation_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                            related_name='observation__observation_concept')
+                                            related_name='observation_observation_concept')
     observation_date = models.DateField(blank=True, null=True)
     observation_datetime = models.DateTimeField(blank=True, null=True)
     observation_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                 related_name='observation__observation_type_concept')
-    value_as_number = models.DecimalField(blank=True, null=True)
+                                                 related_name='observation_observation_type_concept')
+    value_as_number = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     value_as_string = models.CharField(max_length=200, blank=True)
     value_as_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                         related_name='observation__value_as_concept')
+                                         related_name='observation_value_as_concept')
     qualifier_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                          related_name='observation__qualifier_concept')
+                                          related_name='observation_qualifier_concept')
     unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                     related_name='observation__unit_concept')
+                                     related_name='observation_unit_concept')
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
     visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True)
     visit_detail = models.ForeignKey('VisitDetail', on_delete=models.SET_NULL, blank=True, null=True)
     observation_source_value = models.CharField(max_length=200, blank=True)
     observation_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                   related_name='observation__observation_source_concept')
+                                                   related_name='observation_observation_source_concept')
     unit_source_value = models.CharField(max_length=200, blank=True)
     qualifier_source_value = models.CharField(max_length=200, blank=True)
     observation_event = models.ForeignKey("ProcedureOccurrence", on_delete=models.SET_NULL, blank=True, null=True)
     obs_event_field_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                related_name='observation__obs_event_field_concept')
+                                                related_name='observation_obs_event_field_concept')
     value_as_datetime = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
@@ -352,12 +354,16 @@ class Note(models.Model):
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     note_date = models.DateField(blank=True, null=True)
     note_datetime = models.DateTimeField(blank=True, null=True)
-    note_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    note_class_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    note_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                          related_name='note_note_type_concept')
+    note_class_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                           related_name='note_note_class_concept')
     note_title = models.CharField(max_length=250, blank=True)
     note_text = models.TextField(blank=True)
-    encoding_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    language_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    encoding_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='note_encoding_concept')
+    language_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='note_language_concept')
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
     visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True)
     visit_detail = models.ForeignKey('VisitDetail', on_delete=models.SET_NULL, blank=True, null=True)
@@ -374,11 +380,13 @@ class NoteNlp(models.Model):
     """
     note_nlp_id = models.CharField(unique=True, max_length=200)
     note = models.ForeignKey(Note, models.CASCADE)
-    section_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    section_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                        related_name='note_nlp_section_concept')
     snippet = models.CharField(max_length=250, blank=True)
     offset = models.CharField(max_length=250, blank=True)
     lexical_variant = models.CharField(max_length=250)
-    note_nlp_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    note_nlp_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='note_nlp_note_nlp_concept')
     nlp_system = models.CharField(max_length=250, blank=True)
     nlp_date = models.DateField(blank=True, null=True)
     nlp_datetime = models.DateTimeField(blank=True, null=True)
@@ -386,7 +394,8 @@ class NoteNlp(models.Model):
     term_exists = models.CharField(max_length=1, blank=True)
     term_temporal = models.CharField(max_length=200, blank=True)
     term_modifiers = models.CharField(max_length=2000, blank=True)
-    note_nlp_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    note_nlp_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                related_name='note_nlp_note_nlp_source_concept')
 
     def __str__(self):
         return str(self.note_nlp_id)
@@ -398,14 +407,19 @@ class Specimen(models.Model):
     """
     specimen_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey(Person, models.CASCADE)
-    specimen_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    specimen_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    specimen_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='specimen_specimen_concept')
+    specimen_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                              related_name='specimen_specimen_type_concept')
     specimen_date = models.DateField(blank=True, null=True)
     specimen_datetime = models.DateTimeField(blank=True, null=True)
     quantity = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    anatomic_site_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    disease_status_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                     related_name='specimen_unit_concept')
+    anatomic_site_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                              related_name='specimen_anatomic_site_concept')
+    disease_status_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                               related_name='specimen_disease_status_concept')
     specimen_source_id = models.CharField(max_length=200, blank=True)
     specimen_source_value = models.CharField(max_length=200, blank=True)
     unit_source_value = models.CharField(max_length=200, blank=True)
@@ -421,11 +435,14 @@ class FactRelationship(models.Model):
     The FACT_RELATIONSHIP table contains records about
     the relationships between facts stored as records in any table of the CDM.
     """
-    domain_concept_id_1 = models.ForeignKey('Concept', models.CASCADE, db_column='domain_concept_id_1')
+    domain_concept_id_1 = models.ForeignKey('Concept', models.CASCADE, db_column='domain_concept_id_1',
+                                            related_name='fact_relationship_domain_concept_id_1')
     fact_id_1 = models.BigIntegerField(null=True)
-    domain_concept_id_2 = models.ForeignKey('Concept', models.CASCADE, db_column='domain_concept_id_2')
+    domain_concept_id_2 = models.ForeignKey('Concept', models.CASCADE, db_column='domain_concept_id_2',
+                                            related_name='fact_relationship_domain_concept_id_2')
     fact_id_2 = models.BigIntegerField(null=True)
-    relationship_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    relationship_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                             related_name='fact_relationship_relationship_concept')
 
     def __str__(self):
         return str(self.id)
@@ -437,29 +454,38 @@ class SurveyConduct(models.Model):
     """
     survey_conduct_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    survey_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    survey_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                       related_name='survey_conduct_survey_concept')
     survey_start_date = models.DateField(blank=True, null=True)
     survey_start_datetime = models.DateTimeField(blank=True, null=True)
     survey_end_date = models.DateField(blank=True, null=True)
     survey_end_datetime = models.DateTimeField(blank=True, null=True)
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
-    assisted_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    respondent_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    timing_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    collection_method_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    assisted_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='survey_conduct_assisted_concept')
+    respondent_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                related_name='survey_conduct_respondent_type_concept')
+    timing_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                       related_name='survey_conduct_timing_concept')
+    collection_method_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                  related_name='survey_conduct_collection_method_concept')
     assisted_source_value = models.CharField(max_length=200, blank=True)
     respondent_type_source_value = models.CharField(max_length=200, blank=True)
     timing_source_value = models.CharField(max_length=200, blank=True)
     collection_method_source_value = models.CharField(max_length=200, blank=True)
     survey_source_value = models.CharField(max_length=200, blank=True)
-    survey_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    survey_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                              related_name='survey_conduct_survey_source_concept')
     survey_source_identifier = models.CharField(max_length=200, blank=True)
-    validated_survey_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    validated_survey_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                 related_name='survey_conduct_validated_survey_concept')
     validated_survey_source_value = models.CharField(max_length=200, blank=True)
     survey_version_number = models.CharField(max_length=200, blank=True)
-    visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True)
+    visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='survey_conduct_visit_occurrence')
     visit_detail = models.ForeignKey('VisitDetail', on_delete=models.SET_NULL, blank=True, null=True)
-    response_visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True)
+    response_visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True,
+                                                  related_name='survey_conduct_response_visit_occurrence')
 
     def __str__(self):
         return str(self.survey_conduct_id)
@@ -531,15 +557,19 @@ class Provider(models.Model):
     provider_name = models.CharField(max_length=500, blank=True, null=True)
     npi = models.CharField(max_length=200, blank=True)
     dea = models.CharField(max_length=200, blank=True)
-    specialty_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    specialty_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                          related_name='provider_specialty_concept')
     care_site = models.ForeignKey(CareSite, on_delete=models.SET_NULL, blank=True, null=True)
     year_of_birth = models.IntegerField(blank=True, null=True)
-    gender_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    gender_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                       related_name='provider_gender_concept')
     provider_source_value = models.CharField(max_length=200, blank=True)
     specialty_source_value = models.CharField(max_length=200, blank=True)
-    specialty_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    specialty_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                 related_name='provider_specialty_source_concept')
     gender_source_value = models.CharField(max_length=200, blank=True)
-    gender_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    gender_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                              related_name='provider_gender_source_concept')
 
     def __str__(self):
         return str(self.provider_id)
@@ -554,26 +584,38 @@ class PayerPlanPeriod(models.Model):
     a Person is continuously enrolled under a specific health Plan benefit structure from a given Payer.
     """
     payer_plan_period_id = models.CharField(unique=True, max_length=200)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE)
-    contract_person = models.ForeignKey('Person', on_delete=models.SET_NULL, blank=True, null=True)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE,
+                               related_name='payer_plan_period_person')
+    contract_person = models.ForeignKey('Person', on_delete=models.SET_NULL, blank=True, null=True,
+                                        related_name='payer_plan_period_contract_person')
     payer_plan_period_start_date = models.DateField(blank=True, null=True)
     payer_plan_period_end_date = models.DateField(blank=True, null=True)
-    payer_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    plan_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    contract_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    sponsor_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    stop_reason_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    payer_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                      related_name='payer_plan_period_payer_concept')
+    plan_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                     related_name='payer_plan_period_plan_concept')
+    contract_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='payer_plan_period_contract_concept')
+    sponsor_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                        related_name='payer_plan_period_sponsor_concept')
+    stop_reason_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                            related_name='payer_plan_period_stop_reason_concept')
     payer_source_value = models.CharField(max_length=200, blank=True)
-    payer_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    payer_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                             related_name='payer_plan_period_payer_source_concept')
     plan_source_value = models.CharField(max_length=200, blank=True)
-    plan_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    plan_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                            related_name='payer_plan_period_plan_source_concept')
     contract_source_value = models.CharField(max_length=200, blank=True)
-    contract_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    contract_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                related_name='payer_plan_period_contract_source_concept')
     sponsor_source_value = models.CharField(max_length=200, blank=True)
-    sponsor_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    sponsor_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                               related_name='payer_plan_period_sponsor_source_concept')
     family_source_value = models.CharField(max_length=200, blank=True)
     stop_reason_source_value = models.CharField(max_length=200, blank=True)
-    stop_reason_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    stop_reason_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                   related_name='payer_plan_period_stop_reason_source_concept')
 
     def __str__(self):
         return str(self.payer_plan_period_id)
@@ -587,18 +629,25 @@ class Cost(models.Model):
     cost_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
     cost_event_id = models.BigIntegerField(null=True)
-    cost_event_field_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    cost_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    cost_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    currency_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    cost_event_field_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                                 related_name='cost_cost_event_field_concept')
+    cost_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                     related_name='cost_cost_concept')
+    cost_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                          related_name='cost_cost_type_concept')
+    currency_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='cost_currency_concept')
     cost = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     incurred_date = models.DateField(blank=True, null=True)
     billed_date = models.DateField(blank=True, null=True)
     paid_date = models.DateField(blank=True, null=True)
-    revenue_code_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    drg_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    revenue_code_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                             related_name='cost_revenue_code_concept')
+    drg_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                    related_name='cost_drg_concept')
     cost_source_value = models.CharField(max_length=200, blank=True)
-    cost_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    cost_source_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                            related_name='cost_cost_source_concept')
     revenue_code_source_value = models.CharField(max_length=200, blank=True)
     drg_source_value = models.CharField(max_length=200, blank=True, null=True)
     payer_plan_period = models.ForeignKey('PayerPlanPeriod', on_delete=models.SET_NULL, blank=True, null=True)
@@ -634,8 +683,10 @@ class DoseEra(models.Model):
     """
     dose_era_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
-    drug_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    drug_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                     related_name='dose_era_drug_concept')
+    unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                     related_name='dose_era_unit_concept')
     dose_value = models.DecimalField(max_digits=65535, decimal_places=65535)
     dose_era_start_datetime = models.DateTimeField(blank=True, null=True)
     dose_era_end_datetime = models.DateTimeField(blank=True, null=True)
@@ -667,11 +718,14 @@ class Metadata(models.Model):
     The METADATA table contains metadata information about a dataset that
     has been transformed to the OMOP Common Data Model.
     """
-    metadata_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
-    metadata_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    metadata_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='metadata_metadata_concept')
+    metadata_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                              related_name='metadata_metadata_type_concept')
     name = models.CharField(max_length=255, blank=True)
     value_as_string = models.TextField(blank=True)
-    value_as_concept_id = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True)
+    value_as_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
+                                         related_name='metadata_value_as_concept')
     metadata_date = models.DateField(blank=True, null=True)
     metadata_datetime = models.DateTimeField(blank=True, null=True)
 
@@ -735,7 +789,8 @@ class Vocabulary(models.Model):
     vocabulary_name = models.CharField(max_length=255, blank=True)
     vocabulary_reference = models.CharField(max_length=255, blank=True)
     vocabulary_version = models.CharField(max_length=255, blank=True, null=True)
-    vocabulary_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True)
+    vocabulary_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
+                                           related_name='vocabulary_vocabulary_concept')
 
     def __str__(self):
         return str(self.vocabulary_id)
@@ -749,7 +804,8 @@ class Domain(models.Model):
 
     domain_id = models.CharField(unique=True, max_length=200)
     domain_name = models.CharField(max_length=255, blank=True)
-    domain_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True)
+    domain_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
+                                       related_name='domain_domain_concept')
 
     def __str__(self):
         return str(self.domain_id)
@@ -773,13 +829,15 @@ class ConceptRelationship(models.Model):
     The CONCEPT_RELATIONSHIP table contains records that define direct relationships
     between any two Concepts and the nature or type of the relationship.
     """
-    concept_id_1 = models.OneToOneField(Concept, on_delete=models.CASCADE)
-    concept_id_2 = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True)
+    concept_id_1 = models.OneToOneField(Concept, on_delete=models.CASCADE,
+                                        related_name='concept_relationship_concept_id_1')
+    concept_id_2 = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
+                                     related_name='concept_relationship_concept_id_2')
     relationship = models.ForeignKey('Relationship', on_delete=models.SET_NULL, null=True, blank=True)
     valid_start_date = models.DateField(null=True, blank=True)
     valid_end_date = models.DateField(null=True, blank=True)
     # D - deleted, U - updated
-    invalid_reason = models.CharField(choices=[("D", "D"), ("U", "U")], blank=True, null=True)
+    invalid_reason = models.CharField(max_length=2, choices=[("D", "D"), ("U", "U")], blank=True, null=True)
 
     def __str__(self):
         return str(self.concept_id_1)
@@ -806,10 +864,10 @@ class ConceptSynonym(models.Model):
     The CONCEPT_SYNONYM table is used to store alternate names and descriptions for Concepts.
     """
     concept = models.ForeignKey(Concept, on_delete=models.CASCADE,
-                                related_name='concept_synonym__concept')
+                                related_name='concept_synonym_concept')
     concept_synonym_name = models.CharField(max_length=1000)
     language_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
-                                         related_name='concept_synonym__language_concept')
+                                         related_name='concept_synonym_language_concept')
 
     def __str__(self):
         return str(self.id)
@@ -821,9 +879,9 @@ class ConceptAncestor(models.Model):
     by providing the complete hierarchical relationships between Concepts.
     """
     ancestor_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                         related_name='concept_ancestor__ancestor_concept')
+                                         related_name='concept_ancestor_ancestor_concept')
     descendant_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                           related_name='concept_ancestor__descendant_concept')
+                                           related_name='concept_ancestor_descendant_concept')
     min_levels_of_separation = models.IntegerField(null=True)
     max_levels_of_separation = models.IntegerField(null=True)
 
@@ -839,18 +897,18 @@ class SourceToConceptMap(models.Model):
     """
     source_code = models.CharField(max_length=200, blank=True)
     source_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                       related_name='source_to_map__source_concept')
+                                       related_name='source_to_map_source_concept')
     source_vocabulary = models.ForeignKey('Vocabulary', on_delete=models.SET_NULL, blank=True, null=True,
-                                          related_name='source_to_map__source_vocabulary')
+                                          related_name='source_to_map_source_vocabulary')
     source_code_description = models.CharField(max_length=500, blank=True)
     target_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                       related_name='source_to_map__target_concept')
+                                       related_name='source_to_map_target_concept')
     target_vocabulary = models.ForeignKey('Vocabulary', on_delete=models.SET_NULL, blank=True, null=True,
-                                          related_name='source_to_map__target_vocabulary')
+                                          related_name='source_to_map_target_vocabulary')
     valid_start_date = models.DateField(null=True, blank=True)
     valid_end_date = models.DateField(null=True, blank=True)
     # D - deleted, U - updated
-    invalid_reason = models.CharField(choices=[("D", "D"), ("U", "U")], blank=True, null=True)
+    invalid_reason = models.CharField(max_length=2, choices=[("D", "D"), ("U", "U")], blank=True, null=True)
 
     def __str__(self):
         return str(self.id)
@@ -862,22 +920,22 @@ class DrugStrength(models.Model):
     associated units of a specific ingredient contained within a particular drug product.
     """
     drug_concept = models.ForeignKey(Concept, on_delete=models.CASCADE,
-                                     related_name='drug_strength__drug_concept')
+                                     related_name='drug_strength_drug_concept')
     ingredient_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                           related_name='drug_strength__ingredient_concept')
-    amount_value = models.DecimalField(blank=True, null=True)
+                                           related_name='drug_strength_ingredient_concept')
+    amount_value = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     amount_unit_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                            related_name='drug_strength__amount_unit_concept')
-    numerator_value = models.DecimalField(blank=True, null=True)
+                                            related_name='drug_strength_amount_unit_concept')
+    numerator_value = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     numerator_unit_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                               related_name='drug_strength__numerator_unit_concept')
-    denominator_value = models.DecimalField(blank=True, null=True)
+                                               related_name='drug_strength_numerator_unit_concept')
+    denominator_value = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
     denominator_unit_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
-                                                 related_name='drug_strength__denominator_unit_concept')
+                                                 related_name='drug_strength_denominator_unit_concept')
     box_size = models.IntegerField(blank=True, null=True)
     valid_start_date = models.DateField(null=True, blank=True)
     valid_end_date = models.DateField(null=True, blank=True)
-    invalid_reason = models.CharField(choices=[("D", "D"), ("U", "U")], blank=True, null=True)
+    invalid_reason = models.CharField(max_length=2, choices=[("D", "D"), ("U", "U")], blank=True, null=True)
 
     def __str__(self):
         return str(self.id)
@@ -911,10 +969,10 @@ class CohortDefinition(models.Model):
     cohort_definition_name = models.CharField(max_length=255)
     cohort_definition_description = models.TextField(blank=True)
     definition_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                                related_name='cohort_definition__definition_type_concept')
+                                                related_name='cohort_definition_definition_type_concept')
     cohort_definition_syntax = models.TextField(blank=True)
     subject_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
-                                        related_name='cohort_definition__subject_concept')
+                                        related_name='cohort_definition_subject_concept')
     cohort_initiation_date = models.DateField(blank=True, null=True)
 
     def __str__(self):

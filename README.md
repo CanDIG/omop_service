@@ -20,11 +20,12 @@ The service is built with:
     python manage.py migrate
     ```
 
-3. Start development server at `localhost:8000`
+3. Start development server
 
     ```
     python manage.py runserver
     ```
+   The service should be accessible now at `localhost:8000`
 
 4. Create admin user
 

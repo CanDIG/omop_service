@@ -18,5 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', include('data_tables.urls')),
+    # REST framework's login and logout views
+    # path('api-auth/', include('rest_framework.urls'))
+    # path('', include('data_tables.urls')),
 ]

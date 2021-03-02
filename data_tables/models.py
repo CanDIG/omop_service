@@ -273,9 +273,8 @@ class DeviceExposure(models.Model):
 
 class Measurement(models.Model):
     """
-    The 'Device' domain captures information about a person's exposure
-    to a foreign physical object or instrument which is used for diagnostic
-    or therapeutic purposes through a mechanism beyond chemical action.
+    The MEASUREMENT table contains both orders and results of such Measurements
+    as laboratory tests, vital signs, quantitative findings from pathology reports, etc.
     """
     measurement_id = models.CharField(unique=True, max_length=200)
     person = models.ForeignKey('Person', on_delete=models.CASCADE)
@@ -949,6 +948,7 @@ class Cohort(models.Model):
     The COHORT table contains records of subjects that satisfy a given set of criteria for a duration of time.
     """
     cohort_definition = models.OneToOneField('CohortDefinition', on_delete=models.CASCADE)
+    # TODO this probably should be M"M relationship to Person since Cohort might have many patients listed
     subject = models.ForeignKey('Person', on_delete=models.SET_NULL, blank=True, null=True)
     cohort_start_date = models.DateField(blank=True, null=True)
     cohort_end_date = models.DateField(blank=True, null=True)

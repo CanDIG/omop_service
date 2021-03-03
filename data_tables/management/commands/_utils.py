@@ -16,19 +16,20 @@ def parse_file(file):
 def import_concept(file):
     df = parse_file(file)
     for concept in df:
-        valid_start_date = concept.get("valid_start_date", None)
-        if valid_start_date:
-            valid_start_date = datetime.datetime.strptime(valid_start_date, "%Y%m%d").date()
-        valid_end_date = concept.get("valid_end_date", None)
-        if valid_end_date:
-            valid_end_date = datetime.datetime.strptime(valid_end_date, "%Y%m%d").date()
+
+        # convert date strings to datetime.date object
+        dates = dict()
+        for d in ["valid_start_date", "valid_end_date"]:
+            if concept[d]:
+                dates[d] = datetime.datetime.strptime(concept[d], "%Y%m%d").date()
+
         created, _ = Concept.objects.get_or_create(
             concept_id=concept["concept_id"],
             concept_name=concept.get("concept_name", ""),
             standard_concept=concept.get("standard_concept", ""),
             concept_code=concept.get("concept_code", ""),
-            valid_start_date=valid_start_date,
-            valid_end_date=valid_end_date,
+            valid_start_date=dates["valid_start_date"],
+            valid_end_date=dates["valid_end_date"],
             invalid_reason=concept.get("invalid_reason", "")
         )
         print(f"Created concept {concept['concept_id']}.")

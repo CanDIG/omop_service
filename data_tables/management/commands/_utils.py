@@ -1,5 +1,5 @@
 import csv
-from data_tables.models import Concept, Domain, Vocabulary
+from data_tables.models import Concept, Domain, Vocabulary, ConceptClass
 import datetime
 
 
@@ -13,7 +13,7 @@ def parse_file(file):
         return df
 
 
-def import_concepts(file):
+def import_concept(file):
     df = parse_file(file)
     for concept in df:
         valid_start_date = concept.get("valid_start_date", None)
@@ -31,10 +31,10 @@ def import_concepts(file):
             valid_end_date=valid_end_date,
             invalid_reason=concept.get("invalid_reason", "")
         )
-        print(f"Created {concept['concept_id']}.")
+        print(f"Created concept {concept['concept_id']}.")
 
 
-def import_vocabularies(file):
+def import_vocabulary(file):
     df = parse_file(file)
     for vocab in df:
         created, _ = Vocabulary.objects.get_or_create(
@@ -44,10 +44,10 @@ def import_vocabularies(file):
             vocabulary_version=vocab.get("vocabulary_version", "")
             #vocabulary_concept=vocab.get("vocabulary_concept", "")
         )
-        print(f"Created {vocab['vocabulary_id']}.")
+        print(f"Created vocabulary {vocab['vocabulary_id']}.")
 
 
-def import_domains(file):
+def import_domain(file):
     df = parse_file(file)
     for domain in df:
         created, _ = Domain.objects.get_or_create(
@@ -55,4 +55,15 @@ def import_domains(file):
             domain_name=domain.get("domain_name", ""),
             #domain_concept=concept.get("domain_concept", ""),
         )
-        print(f"Created {domain['domain_id']}.")
+        print(f"Created domain {domain['domain_id']}.")
+
+
+def import_concept_class(file):
+    df = parse_file(file)
+    for concept_class in df:
+        created, _ = ConceptClass.objects.get_or_create(
+            concept_class_id=concept_class["concept_class_id"],
+            concept_class_name=concept_class.get("concept_class_name", ""),
+            #concept_class_concept=concept_class.get("concept_class_concept", ""),
+        )
+        print(f"Created concept class {concept_class['concept_class_id']}.")

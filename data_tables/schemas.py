@@ -66,3 +66,91 @@ PERSON_SCHEMA = {
     },
     "required": ["person_id"]
 }
+
+OBSERVATION_PERIOD_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "observation_period_id": {
+            "type": "string"
+        },
+        "person_id": {
+            "type": "string"
+        },
+        "observation_period_start_date": {
+            "type": "string"
+        },
+        "observation_period_end_date": {
+            "type": "string"
+        },
+        "period_type_concept": {
+            "type": "string"
+        },
+    },
+    "required": ["observation_period_id"]
+}
+
+MEASUREMENT_SCHEMA = {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "measurement_id": {
+            "type": "string"
+        },
+        "person": {
+            "type": "string"
+        },
+        "measurement_concept": {
+            "type": "string"
+        },
+        "measurement_date": {
+            "type": "string"
+        },
+        "measurement_datetime": {
+            "type": "string"
+        },
+        "measurement_type_concept": {
+            "type": "string"
+        },
+        "operator_concept": {
+            "type": "string"
+        },
+        "value_as_number": {
+            "type": "number"
+        },
+        "value_as_concept": {
+            "type": "string"
+        },
+        "unit_concept": {
+            "type": "string"
+        },
+        "range_low": {
+            "type": "number"
+        },
+        "range_high": {
+            "type": "number"
+        },
+        "provider": {
+            "type": "string"
+        },
+        "visit_occurrence": {
+            "type": "string"
+        },
+        "visit_detail": {
+            "type": "string"
+        },
+        "measurement_source_value": {
+            "type": "string"
+        },
+        "measurement_source_concept": {
+            "type": "string"
+        },
+        "unit_source_value": {
+            "type": "string"
+        },
+        "value_source_value": {
+            "type": "string"
+        },
+    },
+    "required": ["measurement_id"]
+}

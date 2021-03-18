@@ -1,5 +1,9 @@
 import csv
-from data_tables.models import Concept, Domain, Vocabulary, ConceptClass, ConceptAncestor, Relationship
+from data_tables.models import (
+    Concept, Domain, Vocabulary,
+    ConceptClass, ConceptAncestor,
+    Relationship, ConceptRelationship
+)
 import datetime
 
 
@@ -123,3 +127,27 @@ def import_relationship(file):
         relationship_obj.reverse_relationship = reverse_relationship
         relationship_obj.save()
         print(f"Linked reversed relationship to {relationship_obj}.")
+
+
+def import_concept_relationship(file):
+    df = parse_file(file)
+    for concept_relationship in df:
+        concept_id_1, _ = Concept.objects.get_or_create(concept_id=concept_relationship["concept_id_1"])
+        concept_id_2, _ = Concept.objects.get_or_create(concept_id=concept_relationship["concept_id_2"])
+        relationship, _ = Relationship.objects.get_or_create(relationship_id=concept_relationship["relationship_id"])
+
+        # convert date strings to datetime.date object
+        dates = dict()
+        for d in ["valid_start_date", "valid_end_date"]:
+            if concept_relationship[d]:
+                dates[d] = datetime.datetime.strptime(concept_relationship[d], "%Y%m%d").date()
+
+        concept_relationship_obj, _ = ConceptRelationship.objects.get_or_create(
+            concept_id_1=concept_id_1,
+            concept_id_2=concept_id_2,
+            relationship=relationship,
+            valid_start_date=dates.get("valid_start_date"),
+            valid_end_date=dates.get("valid_end_date"),
+            invalid_reason=concept_relationship.get("invalid_reason")
+        )
+        print(f"Created concept relationship {concept_relationship_obj}.")

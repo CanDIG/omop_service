@@ -1,5 +1,5 @@
 import csv
-from data_tables.models import Concept, Domain, Vocabulary, ConceptClass, ConceptAncestor
+from data_tables.models import Concept, Domain, Vocabulary, ConceptClass, ConceptAncestor, Relationship
 import datetime
 
 
@@ -94,4 +94,32 @@ def import_concept_ancestor(file):
             min_levels_of_separation=concept_ancestor.get("min_levels_of_separation"),
             max_levels_of_separation=concept_ancestor.get("max_levels_of_separation")
         )
-        print(f"Created concept class {concept_ancestor_obj.id}.")
+        print(f"Created concept ancestor {concept_ancestor_obj.id}.")
+
+
+def import_relationship(file):
+    df = parse_file(file)
+    for relationship in df:
+        relationship_concept, _ = Concept.objects.get_or_create(concept_id=relationship["relationship_concept_id"])
+        is_hierarchical = True if relationship["is_hierarchical"] == "1" else False
+        defines_ancestry = True if relationship["defines_ancestry"] == "1" else False
+        relationship_obj, _ = Relationship.objects.get_or_create(
+            relationship_id=relationship["relationship_id"],
+            relationship_name=relationship.get("relationship_name"),
+            is_hierarchical=is_hierarchical,
+            defines_ancestry=defines_ancestry,
+            relationship_concept=relationship_concept
+        )
+        print(f"Created relationship {relationship_obj}.")
+
+    # update Relationship object with reverse relationship to its class
+    for relationship in df:
+        reverse_relationship = Relationship.objects.get(
+            relationship_id=relationship["reverse_relationship_id"],
+        )
+        relationship_obj = Relationship.objects.get(
+            relationship_id=relationship["relationship_id"]
+        )
+        relationship_obj.reverse_relationship = reverse_relationship
+        relationship_obj.save()
+        print(f"Linked reversed relationship to {relationship_obj}.")

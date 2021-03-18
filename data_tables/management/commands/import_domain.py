@@ -3,6 +3,7 @@ from ._utils import import_domain
 
 
 class Command(BaseCommand):
+    """ run: python manage.py import_domain DOMAIN.csv """
     help = "Imports domains from csv obtained from the Athena server."
 
     def add_arguments(self, parser):

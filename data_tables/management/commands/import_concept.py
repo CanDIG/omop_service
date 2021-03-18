@@ -3,6 +3,7 @@ from ._utils import import_concept
 
 
 class Command(BaseCommand):
+    """ run: python manage.py import_concept CONCEPT.csv """
     help = "Imports concepts from csv obtained from the Athena server."
 
     def add_arguments(self, parser):

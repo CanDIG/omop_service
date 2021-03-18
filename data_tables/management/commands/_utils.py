@@ -1,5 +1,5 @@
 import csv
-from data_tables.models import Concept, Domain, Vocabulary, ConceptClass
+from data_tables.models import Concept, Domain, Vocabulary, ConceptClass, ConceptAncestor
 import datetime
 
 
@@ -81,3 +81,17 @@ def import_concept_class(file):
             concept_class_concept=concept
         )
         print(f"Created concept class {concept_class['concept_class_id']}.")
+
+
+def import_concept_ancestor(file):
+    df = parse_file(file)
+    for concept_ancestor in df:
+        ancestor_concept, _ = Concept.objects.get_or_create(concept_id=concept_ancestor["ancestor_concept_id"])
+        descendant_concept, _ = Concept.objects.get_or_create(concept_id=concept_ancestor["descendant_concept_id"])
+        concept_ancestor_obj, _ = ConceptAncestor.objects.get_or_create(
+            ancestor_concept=ancestor_concept,
+            descendant_concept=descendant_concept,
+            min_levels_of_separation=concept_ancestor.get("min_levels_of_separation"),
+            max_levels_of_separation=concept_ancestor.get("max_levels_of_separation")
+        )
+        print(f"Created concept class {concept_ancestor_obj.id}.")

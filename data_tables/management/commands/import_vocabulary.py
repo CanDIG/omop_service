@@ -3,6 +3,7 @@ from ._utils import import_vocabulary
 
 
 class Command(BaseCommand):
+    """ run: python manage.py import_vocabulary VOCABULARY.csv """
     help = "Imports vocabularies from csv obtained from the Athena server."
 
     def add_arguments(self, parser):

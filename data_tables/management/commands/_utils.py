@@ -2,7 +2,8 @@ import csv
 from data_tables.models import (
     Concept, Domain, Vocabulary,
     ConceptClass, ConceptAncestor,
-    Relationship, ConceptRelationship
+    Relationship, ConceptRelationship,
+    ConceptSynonym
 )
 import datetime
 
@@ -10,7 +11,7 @@ import datetime
 def parse_file(file):
     """ Parse the csv file and return dataframe. """
 
-    with open(file, "r") as csv_file:
+    with open(file, "r", encoding="utf8") as csv_file:
         csv_data = csv.reader(csv_file, delimiter="\t")  # or ","
         headers = next(csv_data)
         df = [dict(zip(headers, i)) for i in csv_data]
@@ -151,3 +152,16 @@ def import_concept_relationship(file):
             invalid_reason=concept_relationship.get("invalid_reason")
         )
         print(f"Created concept relationship {concept_relationship_obj}.")
+
+
+def import_concept_synonym(file):
+    df = parse_file(file)
+    for concept_synonym in df[:100]:
+        concept, _ = Concept.objects.get_or_create(concept_id=concept_synonym["concept_id"])
+        language_concept, _ = Concept.objects.get_or_create(concept_id=concept_synonym["language_concept_id"])
+        concept_synonym_obj, _ = ConceptSynonym.objects.get_or_create(
+            concept=concept,
+            concept_synonym_name=concept_synonym["concept_synonym_name"],
+            language_concept=language_concept
+        )
+        print(f"Created concept synonym {concept_synonym_obj.concept_synonym_name}.")

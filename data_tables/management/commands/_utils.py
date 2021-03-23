@@ -157,7 +157,7 @@ def import_concept_relationship(file):
 
 def import_concept_synonym(file):
     df = parse_file(file)
-    for concept_synonym in df[:100]:
+    for concept_synonym in df:
         concept, _ = Concept.objects.get_or_create(concept_id=concept_synonym["concept_id"])
         language_concept, _ = Concept.objects.get_or_create(concept_id=concept_synonym["language_concept_id"])
         concept_synonym_obj, _ = ConceptSynonym.objects.get_or_create(

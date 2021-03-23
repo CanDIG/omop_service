@@ -18,6 +18,44 @@ def parse_file(file):
         return df
 
 
+def import_vocabulary(file):
+    df = parse_file(file)
+    for vocab in df:
+        concept, _ = Concept.objects.get_or_create(concept_id=vocab["vocabulary_concept_id"])
+        vocabulary_obj, _ = Vocabulary.objects.get_or_create(
+            vocabulary_id=vocab["vocabulary_id"],
+            vocabulary_name=vocab.get("vocabulary_name", ""),
+            vocabulary_reference=vocab.get("vocabulary_reference", ""),
+            vocabulary_version=vocab.get("vocabulary_version", ""),
+            vocabulary_concept=concept
+        )
+        print(f"Created vocabulary {vocab['vocabulary_id']}")
+
+
+def import_domain(file):
+    df = parse_file(file)
+    for domain in df:
+        concept, _ = Concept.objects.get_or_create(concept_id=domain["domain_concept_id"])
+        domain_obj, _ = Domain.objects.get_or_create(
+            domain_id=domain["domain_id"],
+            domain_name=domain.get("domain_name", ""),
+            domain_concept=concept
+        )
+        print(f"Created domain {domain['domain_id']}")
+
+
+def import_concept_class(file):
+    df = parse_file(file)
+    for concept_class in df:
+        concept, _ = Concept.objects.get_or_create(concept_id=concept_class["concept_class_concept_id"])
+        concept_class_obj, _ = ConceptClass.objects.get_or_create(
+            concept_class_id=concept_class["concept_class_id"],
+            concept_class_name=concept_class.get("concept_class_name", ""),
+            concept_class_concept=concept
+        )
+        print(f"Created concept class {concept_class['concept_class_id']}")
+
+
 def import_concept(file):
     df = parse_file(file)
     for concept in df:
@@ -28,6 +66,7 @@ def import_concept(file):
             if concept[d]:
                 dates[d] = datetime.datetime.strptime(concept[d], "%Y%m%d").date()
 
+        # for now those should be created beforehand
         # domain
         domain, _ = Domain.objects.get_or_create(domain_id=concept["domain_id"])
         # vocabulary
@@ -47,45 +86,7 @@ def import_concept(file):
             valid_end_date=dates["valid_end_date"],
             invalid_reason=concept.get("invalid_reason", "")
         )
-        print(f"Created concept {concept['concept_id']}.")
-
-
-def import_vocabulary(file):
-    df = parse_file(file)
-    for vocab in df:
-        concept, _ = Concept.objects.get_or_create(concept_id=vocab["vocabulary_concept_id"])
-        vocabulary_obj, _ = Vocabulary.objects.get_or_create(
-            vocabulary_id=vocab["vocabulary_id"],
-            vocabulary_name=vocab.get("vocabulary_name", ""),
-            vocabulary_reference=vocab.get("vocabulary_reference", ""),
-            vocabulary_version=vocab.get("vocabulary_version", ""),
-            vocabulary_concept=concept
-        )
-        print(f"Created vocabulary {vocab['vocabulary_id']}.")
-
-
-def import_domain(file):
-    df = parse_file(file)
-    for domain in df:
-        concept, _ = Concept.objects.get_or_create(concept_id=domain["domain_concept_id"])
-        domain_obj, _ = Domain.objects.get_or_create(
-            domain_id=domain["domain_id"],
-            domain_name=domain.get("domain_name", ""),
-            domain_concept=concept
-        )
-        print(f"Created domain {domain['domain_id']}.")
-
-
-def import_concept_class(file):
-    df = parse_file(file)
-    for concept_class in df:
-        concept, _ = Concept.objects.get_or_create(concept_id=concept_class["concept_class_concept_id"])
-        concept_class_obj, _ = ConceptClass.objects.get_or_create(
-            concept_class_id=concept_class["concept_class_id"],
-            concept_class_name=concept_class.get("concept_class_name", ""),
-            concept_class_concept=concept
-        )
-        print(f"Created concept class {concept_class['concept_class_id']}.")
+        print(f"Created concept {concept['concept_id']}")
 
 
 def import_concept_ancestor(file):
@@ -99,7 +100,7 @@ def import_concept_ancestor(file):
             min_levels_of_separation=concept_ancestor.get("min_levels_of_separation"),
             max_levels_of_separation=concept_ancestor.get("max_levels_of_separation")
         )
-        print(f"Created concept ancestor {concept_ancestor_obj.id}.")
+        print(f"Created concept ancestor {concept_ancestor_obj.id}")
 
 
 def import_relationship(file):
@@ -115,7 +116,7 @@ def import_relationship(file):
             defines_ancestry=defines_ancestry,
             relationship_concept=relationship_concept
         )
-        print(f"Created relationship {relationship_obj}.")
+        print(f"Created relationship {relationship_obj}")
 
     # update Relationship object with reverse relationship to its class
     for relationship in df:
@@ -127,7 +128,7 @@ def import_relationship(file):
         )
         relationship_obj.reverse_relationship = reverse_relationship
         relationship_obj.save()
-        print(f"Linked reversed relationship to {relationship_obj}.")
+        print(f"Linked reversed relationship to {relationship_obj}")
 
 
 def import_concept_relationship(file):
@@ -151,7 +152,7 @@ def import_concept_relationship(file):
             valid_end_date=dates.get("valid_end_date"),
             invalid_reason=concept_relationship.get("invalid_reason")
         )
-        print(f"Created concept relationship {concept_relationship_obj}.")
+        print(f"Created concept relationship {concept_relationship_obj}")
 
 
 def import_concept_synonym(file):
@@ -164,4 +165,4 @@ def import_concept_synonym(file):
             concept_synonym_name=concept_synonym["concept_synonym_name"],
             language_concept=language_concept
         )
-        print(f"Created concept synonym {concept_synonym_obj.concept_synonym_name}.")
+        print(f"Created concept synonym {concept_synonym_obj.concept_synonym_name}")

@@ -34,3 +34,6 @@ The service is built with:
     ```
 
     The admin interface runs at `localhost:8000/admin`
+    
+    
+The OMOP Standardized Vocabularies need to be downloaded independently and can be imported using django commands in `data_tables/management/commands` directory

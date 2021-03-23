@@ -75,17 +75,18 @@ def import_concept(file):
         concept_class, _ = ConceptClass.objects.get_or_create(concept_class_id=concept["concept_class_id"])
 
         concept_obj, _ = Concept.objects.get_or_create(
-            concept_id=concept["concept_id"],
-            concept_name=concept.get("concept_name", ""),
-            domain=domain,
-            vocabulary=vocabulary,
-            concept_class=concept_class,
-            standard_concept=concept.get("standard_concept", ""),
-            concept_code=concept.get("concept_code", ""),
-            valid_start_date=dates["valid_start_date"],
-            valid_end_date=dates["valid_end_date"],
-            invalid_reason=concept.get("invalid_reason", "")
+            concept_id=concept["concept_id"]
         )
+        concept_obj.concept_name = concept.get("concept_name", "")
+        concept_obj.domain = domain
+        concept_obj.vocabulary = vocabulary
+        concept_obj.concept_class = concept_class
+        concept_obj.standard_concept = concept.get("standard_concept", "")
+        concept_obj.concept_code = concept.get("concept_code", "")
+        concept_obj.valid_start_date = dates["valid_start_date"]
+        concept_obj.valid_end_date = dates["valid_end_date"]
+        concept_obj.invalid_reason = concept.get("invalid_reason", "")
+        concept_obj.save()
         print(f"Created concept {concept['concept_id']}")
 
 

@@ -828,8 +828,8 @@ class ConceptRelationship(models.Model):
     The CONCEPT_RELATIONSHIP table contains records that define direct relationships
     between any two Concepts and the nature or type of the relationship.
     """
-    concept_id_1 = models.OneToOneField(Concept, on_delete=models.CASCADE,
-                                        related_name='concept_relationship_concept_id_1')
+    concept_id_1 = models.ForeignKey(Concept, on_delete=models.CASCADE,
+                                     related_name='concept_relationship_concept_id_1')
     concept_id_2 = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
                                      related_name='concept_relationship_concept_id_2')
     relationship = models.ForeignKey('Relationship', on_delete=models.SET_NULL, null=True, blank=True)
@@ -953,7 +953,7 @@ class Cohort(models.Model):
     cohort_start_date = models.DateField(blank=True, null=True)
     cohort_end_date = models.DateField(blank=True, null=True)
 
-    # TODO check this, it's not in the docs but in SQL statements
+    # It's in the Results schema SQL scripts
     # class Meta:
     # unique_together = (('cohort_definition', 'subject', 'cohort_start_date', 'cohort_end_date'),)
 

@@ -1,8 +1,17 @@
 from django.core.management.base import BaseCommand
-from ._utils import *
+from ._utils import (
+    import_vocabulary,
+    import_domain,
+    import_concept_class,
+    import_concept,
+    import_concept_ancestor,
+    import_relationship,
+    import_concept_relationship,
+    import_concept_synonym
+)
 
 
-# Default file names correspond to the file names provided by Athena server
+# Default file names provided by Athena server
 DEFAULT_FILENAMES = {
     "vocabulary": "VOCABULARY.csv",
     "domain": "DOMAIN.csv",
@@ -18,7 +27,7 @@ DEFAULT_FILENAMES = {
 class Command(BaseCommand):
     """ run: python manage.py import_all_vocabularies """
 
-    help = "Imports all standartized vocabularies files obtained from the Athena server."
+    help = "Imports all standardized vocabularies files obtained from the Athena server."
 
     def add_arguments(self, parser):
         parser.add_argument("--vocabulary", type=str, help="The vocabulary filename to import.")
@@ -30,7 +39,7 @@ class Command(BaseCommand):
         parser.add_argument("--concept_relationship", type=str, help="The concept relationship filename to import.")
         parser.add_argument("--concept_synonym", type=str, help="The concept synonym filename to import.")
 
-    def _required_import(self, value, function, **options):
+    def _import(self, value, function, required=True, **options):
         try:
             if options[value]:
                 function(options[value])
@@ -38,12 +47,18 @@ class Command(BaseCommand):
                 function(DEFAULT_FILENAMES[value])
             self.stdout.write(self.style.SUCCESS(f"Successfully imported {value}"))
         except FileNotFoundError:
-            self.stdout.write(self.style.ERROR("The file is not found"))
-            exit()
+            self.stdout.write(self.style.ERROR(f"The {value.replace('_', ' ')} file is not found"))
+            if required:
+                exit()
+            # if non-required files are not found the import continues
+            else:
+                pass
 
     def handle(self, *args, **options):
-
-        # required vocabularies
-        for value, function in zip(["vocabulary", "domain", "concept_class"],
-                                   [import_vocabulary, import_domain, import_concept_class]):
-            self._required_import(value, function, **options)
+        values = ["vocabulary", "domain", "concept_class", "concept", "concept_ancestor",
+                  "relationship", "concept_relationship", "concept_synonym"]
+        functions = [import_vocabulary, import_domain, import_concept_class, import_concept, import_concept_ancestor,
+                     import_relationship, import_concept_relationship, import_concept_synonym]
+        required = [True, True, True, True, False, False, False, False]
+        for value, function, required in zip(values, functions, required):
+            self._import(value, function, required, **options)

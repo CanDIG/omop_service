@@ -828,10 +828,10 @@ class ConceptRelationship(models.Model):
     The CONCEPT_RELATIONSHIP table contains records that define direct relationships
     between any two Concepts and the nature or type of the relationship.
     """
-    concept_id_1 = models.ForeignKey(Concept, on_delete=models.CASCADE,
+    concept_id_1 = models.ForeignKey(Concept, on_delete=models.CASCADE, db_column='concept_id_1',
                                      related_name='concept_relationship_concept_id_1')
     concept_id_2 = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
-                                     related_name='concept_relationship_concept_id_2')
+                                     db_column='concept_id_2', related_name='concept_relationship_concept_id_2')
     relationship = models.ForeignKey('Relationship', on_delete=models.SET_NULL, null=True, blank=True)
     valid_start_date = models.DateField(null=True, blank=True)
     valid_end_date = models.DateField(null=True, blank=True)
@@ -847,7 +847,7 @@ class Relationship(models.Model):
     The RELATIONSHIP table provides a reference list of all types of relationships
     that can be used to associate any two concepts in the CONCEPT_RELATIONSHP table.
     """
-    relationship_id = models.CharField(unique=True, max_length=200)
+    relationship_id = models.CharField(primary_key=True, max_length=200)
     relationship_name = models.CharField(max_length=255, blank=True)
     is_hierarchical = models.BooleanField()
     defines_ancestry = models.BooleanField()

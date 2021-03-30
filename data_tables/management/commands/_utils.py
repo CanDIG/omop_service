@@ -1,3 +1,4 @@
+from django.db import connection
 import csv
 from data_tables.models import (
     Concept, Domain, Vocabulary,
@@ -167,3 +168,31 @@ def import_concept_synonym(file):
             language_concept=language_concept
         )
         print(f"Created concept synonym {concept_synonym_obj.concept_synonym_name}")
+
+
+#TODO better location
+def import_postgres():
+    with connection.cursor() as cursor:
+        cursor.execute("""
+        COPY public.data_tables_concept(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code, valid_start_date, valid_end_date, invalid_reason)
+        FROM 'C:\CDMV6VOCAB\CONCEPT.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+
+        COPY public.data_tables_vocabulary(vocabulary_id, vocabulary_name, vocabulary_reference, vocabulary_version, vocabulary_concept_id)
+        FROM 'C:\CDMV6VOCAB\VOCABULARY.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+
+        COPY public.data_tables_conceptclass(concept_class_id, concept_class_name, concept_class_concept_id)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_CLASS.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+
+        COPY public.data_tables_domain(domain_id, domain_name, domain_concept_id)
+        FROM 'C:\CDMV6VOCAB\DOMAIN.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        """)
+
+    return

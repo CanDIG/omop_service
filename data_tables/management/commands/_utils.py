@@ -178,9 +178,29 @@ def import_postgres():
         FROM 'C:\CDMV6VOCAB\CONCEPT.csv'
         WITH DELIMITER E'\t'
         CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_conceptrelationship(concept_id_1, concept_id_2, relationship_id, valid_start_date, valid_end_date, invalid_reason)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_RELATIONSHIP.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_conceptancestor(ancestor_concept_id, descendant_concept_id, min_levels_of_separation, max_levels_of_separation)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_ANCESTOR.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_conceptsynonym(concept_id, concept_synonym_name, language_concept_id)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_SYNONYM.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
 
         COPY public.data_tables_vocabulary(vocabulary_id, vocabulary_name, vocabulary_reference, vocabulary_version, vocabulary_concept_id)
         FROM 'C:\CDMV6VOCAB\VOCABULARY.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_relationship(relationship_id, relationship_name, is_hierarchical, defines_ancestry, reverse_relationship_id, relationship_concept_id)
+        FROM 'C:\CDMV6VOCAB\RELATIONSHIP.csv'
         WITH DELIMITER E'\t'
         CSV HEADER QUOTE E'\b' ;
 

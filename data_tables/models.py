@@ -762,7 +762,7 @@ class Concept(models.Model):
     """
     # form the source SQL
     # concept_id = models.IntegerField(primary_key=True)
-    concept_id = models.CharField(unique=True, max_length=200)
+    concept_id = models.CharField(primary_key=True, max_length=200)
     concept_name = models.CharField(max_length=255, blank=True)
     domain = models.ForeignKey('Domain', on_delete=models.SET_NULL, null=True, blank=True)
     vocabulary = models.ForeignKey('Vocabulary', on_delete=models.SET_NULL, null=True, blank=True)
@@ -784,7 +784,7 @@ class Vocabulary(models.Model):
     The VOCABULARY table includes a list of the Vocabularies
     collected from various sources or created de novo by the OMOP community.
     """
-    vocabulary_id = models.CharField(unique=True, max_length=200)
+    vocabulary_id = models.CharField(primary_key=True, max_length=200)
     vocabulary_name = models.CharField(max_length=255, blank=True)
     vocabulary_reference = models.CharField(max_length=255, blank=True)
     vocabulary_version = models.CharField(max_length=255, blank=True, null=True)
@@ -801,7 +801,7 @@ class Domain(models.Model):
     the Concepts of the Standardized Vocabularies can belong to.
     """
 
-    domain_id = models.CharField(unique=True, max_length=200)
+    domain_id = models.CharField(primary_key=True, max_length=200)
     domain_name = models.CharField(max_length=255, blank=True)
     domain_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
                                        related_name='domain_domain_concept')
@@ -815,7 +815,7 @@ class ConceptClass(models.Model):
     The CONCEPT_CLASS table is a reference table, which includes a list of the classifications
     used to differentiate Concepts within a given Vocabulary.
     """
-    concept_class_id = models.CharField(unique=True, max_length=200)
+    concept_class_id = models.CharField(primary_key=True, max_length=200)
     concept_class_name = models.CharField(max_length=255, blank=True)
     concept_class_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True)
 

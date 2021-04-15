@@ -173,6 +173,9 @@ def import_concept_synonym(file):
 #TODO better location
 def import_postgres():
     with connection.cursor() as cursor:
+        print("Starting vocabularies import... it might take some time")
+        # How long it will take depends on the number and volumes of vocabularies imported.
+        # The ingestion of just Concepts, Domains, Vocabularies and Concept Classes is significantly faster.
         cursor.execute("""
         COPY public.data_tables_concept(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code, valid_start_date, valid_end_date, invalid_reason)
         FROM 'C:\CDMV6VOCAB\CONCEPT.csv'

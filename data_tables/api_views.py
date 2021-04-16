@@ -107,6 +107,6 @@ class SpecimenViewSet(GenericModelViewSet):
 @api_view(["POST"])
 def ingest(request):
     file = request.data["file"]
-    # TODO
+    # TODO add exceptions
     ingest_persons(file)
     return Response(status=204)

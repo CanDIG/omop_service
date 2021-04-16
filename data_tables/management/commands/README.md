@@ -18,7 +18,8 @@ By default it expects the vocabularies to be located in `C:\CDMV6VOCAB\`  direct
 The directory path can be changed in `omop_service.management.commands._utils.import_postgres` function.
 
 
-2. Import vocabularies with django command (can be used for import into Sqlite database, significantly slower than option 1):
+2. Not recommended, only for small vocabularies.
+Import vocabularies with django command (can be used for import into Sqlite database, significantly slower than option 1):
 
 ```
    python manage.py import_all_vocabularies 

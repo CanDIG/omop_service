@@ -194,7 +194,7 @@ class DrugExposure(models.Model):
                                           related_name='drug_exposure_drug_type_concept')
     stop_reason = models.CharField(max_length=200, blank=True)
     refills = models.IntegerField(blank=True, null=True)
-    quantity = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    quantity = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     days_supply = models.IntegerField(blank=True, null=True)
     sig = models.TextField(blank=True, null=True)
     route_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
@@ -286,13 +286,13 @@ class Measurement(models.Model):
                                                  related_name='measurement_measurement_type_concept')
     operator_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                          related_name='measurement_operator_concept')
-    value_as_number = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    value_as_number = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     value_as_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                          related_name='measurement_value_as_concept')
     unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                      related_name='measurement_unit_concept')
-    range_low = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    range_high = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    range_low = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
+    range_high = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     provider = models.ForeignKey('Provider', on_delete=models.SET_NULL, blank=True, null=True)
     visit_occurrence = models.ForeignKey('VisitOccurrence', on_delete=models.SET_NULL, blank=True, null=True)
     visit_detail = models.ForeignKey('VisitDetail', on_delete=models.SET_NULL, blank=True, null=True)
@@ -319,7 +319,7 @@ class Observation(models.Model):
     observation_datetime = models.DateTimeField(blank=True, null=True)
     observation_type_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                                  related_name='observation_observation_type_concept')
-    value_as_number = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    value_as_number = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     value_as_string = models.CharField(max_length=200, blank=True)
     value_as_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                          related_name='observation_value_as_concept')
@@ -412,7 +412,7 @@ class Specimen(models.Model):
                                               related_name='specimen_specimen_type_concept')
     specimen_date = models.DateField(blank=True, null=True)
     specimen_datetime = models.DateTimeField(blank=True, null=True)
-    quantity = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    quantity = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                      related_name='specimen_unit_concept')
     anatomic_site_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
@@ -507,8 +507,8 @@ class Location(models.Model):
     county = models.CharField(max_length=200, blank=True)
     country = models.CharField(max_length=100, blank=True, null=True)
     location_source_value = models.CharField(max_length=200, blank=True)
-    latitude = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
-    longitude = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    latitude = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
+    longitude = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
 
     def __str__(self):
         return str(self.location_id)
@@ -636,7 +636,7 @@ class Cost(models.Model):
                                           related_name='cost_cost_type_concept')
     currency_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                          related_name='cost_currency_concept')
-    cost = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    cost = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     incurred_date = models.DateField(blank=True, null=True)
     billed_date = models.DateField(blank=True, null=True)
     paid_date = models.DateField(blank=True, null=True)
@@ -686,7 +686,7 @@ class DoseEra(models.Model):
                                      related_name='dose_era_drug_concept')
     unit_concept = models.ForeignKey('Concept', on_delete=models.SET_NULL, blank=True, null=True,
                                      related_name='dose_era_unit_concept')
-    dose_value = models.DecimalField(max_digits=65535, decimal_places=65535)
+    dose_value = models.DecimalField(max_digits=20, decimal_places=12)
     dose_era_start_datetime = models.DateTimeField(blank=True, null=True)
     dose_era_end_datetime = models.DateTimeField(blank=True, null=True)
 
@@ -762,7 +762,7 @@ class Concept(models.Model):
     """
     # form the source SQL
     # concept_id = models.IntegerField(primary_key=True)
-    concept_id = models.CharField(unique=True, max_length=200)
+    concept_id = models.CharField(primary_key=True, max_length=200)
     concept_name = models.CharField(max_length=255, blank=True)
     domain = models.ForeignKey('Domain', on_delete=models.SET_NULL, null=True, blank=True)
     vocabulary = models.ForeignKey('Vocabulary', on_delete=models.SET_NULL, null=True, blank=True)
@@ -784,7 +784,7 @@ class Vocabulary(models.Model):
     The VOCABULARY table includes a list of the Vocabularies
     collected from various sources or created de novo by the OMOP community.
     """
-    vocabulary_id = models.CharField(unique=True, max_length=200)
+    vocabulary_id = models.CharField(primary_key=True, max_length=200)
     vocabulary_name = models.CharField(max_length=255, blank=True)
     vocabulary_reference = models.CharField(max_length=255, blank=True)
     vocabulary_version = models.CharField(max_length=255, blank=True, null=True)
@@ -801,7 +801,7 @@ class Domain(models.Model):
     the Concepts of the Standardized Vocabularies can belong to.
     """
 
-    domain_id = models.CharField(unique=True, max_length=200)
+    domain_id = models.CharField(primary_key=True, max_length=200)
     domain_name = models.CharField(max_length=255, blank=True)
     domain_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
                                        related_name='domain_domain_concept')
@@ -815,7 +815,7 @@ class ConceptClass(models.Model):
     The CONCEPT_CLASS table is a reference table, which includes a list of the classifications
     used to differentiate Concepts within a given Vocabulary.
     """
-    concept_class_id = models.CharField(unique=True, max_length=200)
+    concept_class_id = models.CharField(primary_key=True, max_length=200)
     concept_class_name = models.CharField(max_length=255, blank=True)
     concept_class_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -828,10 +828,10 @@ class ConceptRelationship(models.Model):
     The CONCEPT_RELATIONSHIP table contains records that define direct relationships
     between any two Concepts and the nature or type of the relationship.
     """
-    concept_id_1 = models.ForeignKey(Concept, on_delete=models.CASCADE,
+    concept_id_1 = models.ForeignKey(Concept, on_delete=models.CASCADE, db_column='concept_id_1',
                                      related_name='concept_relationship_concept_id_1')
     concept_id_2 = models.ForeignKey(Concept, on_delete=models.SET_NULL, null=True, blank=True,
-                                     related_name='concept_relationship_concept_id_2')
+                                     db_column='concept_id_2', related_name='concept_relationship_concept_id_2')
     relationship = models.ForeignKey('Relationship', on_delete=models.SET_NULL, null=True, blank=True)
     valid_start_date = models.DateField(null=True, blank=True)
     valid_end_date = models.DateField(null=True, blank=True)
@@ -847,7 +847,7 @@ class Relationship(models.Model):
     The RELATIONSHIP table provides a reference list of all types of relationships
     that can be used to associate any two concepts in the CONCEPT_RELATIONSHP table.
     """
-    relationship_id = models.CharField(unique=True, max_length=200)
+    relationship_id = models.CharField(primary_key=True, max_length=200)
     relationship_name = models.CharField(max_length=255, blank=True)
     is_hierarchical = models.BooleanField()
     defines_ancestry = models.BooleanField()
@@ -922,13 +922,13 @@ class DrugStrength(models.Model):
                                      related_name='drug_strength_drug_concept')
     ingredient_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
                                            related_name='drug_strength_ingredient_concept')
-    amount_value = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    amount_value = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     amount_unit_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
                                             related_name='drug_strength_amount_unit_concept')
-    numerator_value = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    numerator_value = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     numerator_unit_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
                                                related_name='drug_strength_numerator_unit_concept')
-    denominator_value = models.DecimalField(max_digits=65535, decimal_places=65535, blank=True, null=True)
+    denominator_value = models.DecimalField(max_digits=20, decimal_places=12, blank=True, null=True)
     denominator_unit_concept = models.ForeignKey(Concept, on_delete=models.SET_NULL, blank=True, null=True,
                                                  related_name='drug_strength_denominator_unit_concept')
     box_size = models.IntegerField(blank=True, null=True)

@@ -1,3 +1,4 @@
+from django.db import connection
 import csv
 from data_tables.models import (
     Concept, Domain, Vocabulary,
@@ -75,17 +76,18 @@ def import_concept(file):
         concept_class, _ = ConceptClass.objects.get_or_create(concept_class_id=concept["concept_class_id"])
 
         concept_obj, _ = Concept.objects.get_or_create(
-            concept_id=concept["concept_id"],
-            concept_name=concept.get("concept_name", ""),
-            domain=domain,
-            vocabulary=vocabulary,
-            concept_class=concept_class,
-            standard_concept=concept.get("standard_concept", ""),
-            concept_code=concept.get("concept_code", ""),
-            valid_start_date=dates["valid_start_date"],
-            valid_end_date=dates["valid_end_date"],
-            invalid_reason=concept.get("invalid_reason", "")
+            concept_id=concept["concept_id"]
         )
+        concept_obj.concept_name = concept.get("concept_name", "")
+        concept_obj.domain = domain
+        concept_obj.vocabulary = vocabulary
+        concept_obj.concept_class = concept_class
+        concept_obj.standard_concept = concept.get("standard_concept", "")
+        concept_obj.concept_code = concept.get("concept_code", "")
+        concept_obj.valid_start_date = dates["valid_start_date"]
+        concept_obj.valid_end_date = dates["valid_end_date"]
+        concept_obj.invalid_reason = concept.get("invalid_reason", "")
+        concept_obj.save()
         print(f"Created concept {concept['concept_id']}")
 
 
@@ -166,3 +168,54 @@ def import_concept_synonym(file):
             language_concept=language_concept
         )
         print(f"Created concept synonym {concept_synonym_obj.concept_synonym_name}")
+
+
+#TODO better location
+def import_postgres():
+    with connection.cursor() as cursor:
+        print("Starting vocabularies import... it might take some time")
+        # How long it will take depends on the number and volumes of vocabularies imported.
+        # The ingestion of just Concepts, Domains, Vocabularies and Concept Classes is significantly faster.
+        cursor.execute("""
+        COPY public.data_tables_concept(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code, valid_start_date, valid_end_date, invalid_reason)
+        FROM 'C:\CDMV6VOCAB\CONCEPT.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_conceptrelationship(concept_id_1, concept_id_2, relationship_id, valid_start_date, valid_end_date, invalid_reason)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_RELATIONSHIP.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_conceptancestor(ancestor_concept_id, descendant_concept_id, min_levels_of_separation, max_levels_of_separation)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_ANCESTOR.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_conceptsynonym(concept_id, concept_synonym_name, language_concept_id)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_SYNONYM.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+
+        COPY public.data_tables_vocabulary(vocabulary_id, vocabulary_name, vocabulary_reference, vocabulary_version, vocabulary_concept_id)
+        FROM 'C:\CDMV6VOCAB\VOCABULARY.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        
+        COPY public.data_tables_relationship(relationship_id, relationship_name, is_hierarchical, defines_ancestry, reverse_relationship_id, relationship_concept_id)
+        FROM 'C:\CDMV6VOCAB\RELATIONSHIP.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+
+        COPY public.data_tables_conceptclass(concept_class_id, concept_class_name, concept_class_concept_id)
+        FROM 'C:\CDMV6VOCAB\CONCEPT_CLASS.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+
+        COPY public.data_tables_domain(domain_id, domain_name, domain_concept_id)
+        FROM 'C:\CDMV6VOCAB\DOMAIN.csv'
+        WITH DELIMITER E'\t'
+        CSV HEADER QUOTE E'\b' ;
+        """)
+
+    return

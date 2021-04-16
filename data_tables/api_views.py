@@ -1,9 +1,12 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, pagination
 from rest_framework.settings import api_settings
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import pagination
+
 from . import models as models
 from . import serializers as serializers
+from .ingestion import ingest_persons
 
 
 class LargeResultsSetPagination(pagination.PageNumberPagination):
@@ -99,3 +102,11 @@ class SpecimenViewSet(GenericModelViewSet):
     filter_backends = [DjangoFilterBackend]
     # TODO filters
     # filter_class = filters.SpecimenFilter
+
+
+@api_view(["POST"])
+def ingest(request):
+    file = request.data["file"]
+    # TODO
+    ingest_persons(file)
+    return Response(status=204)

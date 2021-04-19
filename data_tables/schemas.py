@@ -6,11 +6,7 @@ PERSON_SCHEMA = {
             "type": "string"
         },
         "gender_concept": {
-            "type": "string",
-            "enum": [
-                "FEMALE",
-                "MALE"
-            ]
+            "type": "string"
         },
         "year_of_birth": {
             "type": "integer"

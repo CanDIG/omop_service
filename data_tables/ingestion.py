@@ -33,33 +33,38 @@ def create_person(obj):
 
 
 def create_observation(obj):
-    observation_obj, _ = Observation.objects.get_or_create(observation_id=obj["observation_id"])
-    observation_obj.person = Person.objects.get(person_id=obj["person_id"])
+    person = Person.objects.get(person_id=obj["person_id"])
+    observation_obj = Observation(observation_id=obj["observation_id"], person=person)
     observation_obj.observation_concept = Concept.objects.get(concept_id=obj["observation_concept_id"])
-    observation_obj.observation_date = obj.get("observation_date", None)
-    observation_obj.observation_datetime = obj.get("observation_datetime", None)
-    observation_obj.value_as_number = obj.get("value_as_number", None)
-    observation_obj.value_as_string = obj.get("value_as_string", None)
 
     concept_fields = {
-        "observation_type_concept_id": observation_obj.observation_type_concept,
-        "value_as_concept_id": observation_obj.value_as_concept,
-        "qualifier_concept_id": observation_obj.qualifier_concept,
-        "unit_concept_id": observation_obj.unit_concept,
-        "observation_source_concept_id": observation_obj.observation_source_concept
+        "observation_type_concept_id": None,
+        "value_as_concept_id": None,
+        "qualifier_concept_id": None,
+        "unit_concept_id": None,
+        "observation_source_concept_id": None
     }
     for value in concept_fields.keys():
-        if obj[value] and obj[value] != "":
+        if value in obj and obj[value] != "":
             concept_fields[value] = Concept.objects.get(concept_id=obj[value])
+
+    observation_obj.observation_type_concept = concept_fields["observation_type_concept_id"]
+    observation_obj.value_as_concept = concept_fields["value_as_concept_id"]
+    observation_obj.qualifier_concept = concept_fields["qualifier_concept_id"]
+    observation_obj.unit_concept = concept_fields["unit_concept_id"]
+    observation_obj.observation_source_concept = concept_fields["observation_source_concept_id"]
+
+    text_fields = ["observation_date", "observation_datetime", "value_as_number", "value_as_string",
+                   "observation_source_value", "unit_source_value", "qualifier_source_value", "value_as_datetime"]
+    for field in text_fields:
+        if field in obj and obj[field] != "":
+            observation_obj.__dict__[field] = obj[field]
 
     # FKs
     # observation_obj.provider = Provider.objects.get(provider_id=person["provider_id"])
     # observation_obj.visit_occurrence = VisitOccurrence.objects.get(visit_occurrence_id=person["visit_occurrence_id"])
     # observation_obj.visit_detail = VisitDetail.objects.get(visit_detail_id=person["visit_detail_id"])
 
-    observation_obj.observation_source_value = obj.get("observation_source_value", None)
-    observation_obj.unit_source_value = obj.get("unit_source_value", None)
-    observation_obj.qualifier_source_value = obj.get("qualifier_source_value", None)
     # FK
     # observation_obj.observation_event = ProcedureOccurrence.objects.get(
     #     procedure_occurrence_id=obj["observation_event_id"]
@@ -67,24 +72,29 @@ def create_observation(obj):
     # if obj["obs_event_field_concept_id"] and obj["obs_event_field_concept_id"] != "":
     #     observation_obj.obs_event_field_concept = Concept.objects.get(concept_id=obj["obs_event_field_concept_id"])
 
-    observation_obj.value_as_datetime = obj.get("value_as_datetime", None)
+    observation_obj.save()
     print(f"Observation {observation_obj.id} created.")
 
 
-def ingest_persons(file):
+def ingest_generic(file, data_type):
     file_type = file.split(".")[-1]
+
+    datatypes = {
+        "person": create_person,
+        "observation": create_observation,
+    }
 
     if file_type == "csv":
         with open(f"{file}", "r") as file_in:
             records = csv.DictReader(file_in)
             for row in records:
-                create_person(dict(row))
+                datatypes[data_type](dict(row))
 
     elif file_type == "json":
         with open(f"{file}") as file_in:
             records = json.load(file_in)
             for record in records:
-                create_person(record)
+                datatypes[data_type](record)
 
     else:
         raise IngestError(f"The file format is not supported: {file_type}")

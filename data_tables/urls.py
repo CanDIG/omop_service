@@ -18,4 +18,6 @@ router.register(r'specimens', api_views.SpecimenViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('ingest', api_views.ingest, name="ingest"),
+    path('overview', api_views.overview,
+         name="overview"),
 ]

@@ -1,3 +1,5 @@
+from collections import Counter
+
 from rest_framework import viewsets, pagination
 from rest_framework.settings import api_settings
 from rest_framework.decorators import api_view
@@ -112,3 +114,72 @@ def ingest(request):
     ingest_generic(file, data_type)
 
     return Response(status=204)
+
+
+PERSON_PREFETCH = (
+    "conditionoccurrence_set",
+    "observation_set",
+    "measurement_set",
+    "specimen_set",
+)
+
+
+@api_view(["GET"])
+def overview(request):
+
+    persons = models.Person.objects.all().prefetch_related(*PERSON_PREFETCH)
+
+    persons_gender_counter = Counter()
+
+    conditions_counter = Counter()
+    observations_counter = Counter()
+    measurements_counter = Counter()
+    specimens_counter = Counter()
+
+    conditions = set()
+    observations = set()
+    measurements = set()
+    specimens = set()
+
+    for person in persons:
+
+        persons_gender_counter.update((person.gender_concept.concept_name,))
+
+        for c in person.conditionoccurrence_set.all():
+            conditions.add(c.id)
+            conditions_counter.update((c.condition_concept.concept_name,))
+
+        for ob in person.observation_set.all():
+            observations.add(ob.id)
+            observations_counter.update((ob.observation_concept.concept_name,))
+
+        for m in person.measurement_set.all():
+            measurements.add(m.id)
+            measurements_counter.update((m.measurement_concept.concept_name,))
+
+        for s in person.specimen_set.all():
+            specimens.add(s.id)
+            specimens_counter.update((s.specimen_concept.concept_name,))
+
+    return Response({
+        "persons": {
+            "count": persons.count(),
+            "sex": dict(persons_gender_counter)
+        },
+        "conditions": {
+            "count": len(conditions),
+            "condition_concept": dict(conditions_counter)
+        },
+        "observations": {
+            "count": len(observations),
+            "observation_concept": dict(observations_counter)
+        },
+        "measurements": {
+            "count": len(measurements),
+            "measurement_concept": dict(measurements_counter)
+        },
+        "specimens": {
+            "count": len(specimens),
+            "specimen_concept": dict(specimens_counter)
+        }
+    })

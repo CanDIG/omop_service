@@ -60,3 +60,50 @@ The service is built with:
     
     
 The OMOP Standardized Vocabularies need to be downloaded independently and can be imported using django commands in `data_tables/management/commands` directory.
+
+
+## API endpoints
+
+### Data types endpoints
+
+`api/persons` GET: list of persons
+
+`api/persons/{id}` GET: single person
+
+`api/conditionoccurrences` GET: list of condition occurrences
+
+`api/conditionoccurrences/{id}` GET: single condition occurrence
+
+`api/procedureoccurrences` GET: list of procedure occurrences
+
+`api/procedureoccurrences/{id}` GET: single procedure occurrence
+
+`api/measurements` GET: list of measurements
+
+`api/measurements/{id}` GET: single measurement
+
+`api/observations` GET: list of observations
+
+`api/observations/{id}` GET: single observation
+
+`api/specimens` GET: list of specimens
+
+`api/specimens/{id}` GET: single specimen
+
+
+### Data overview endpoint
+
+`api/overview` GET: overview of data types and concepts
+
+
+### Ingest endpoint
+
+`api/ingest` POST: ingest data in csv or json
+
+POST body example:
+    
+    {
+    "file": "path/persons.csv",
+    "data_type": "person"
+    }
+    

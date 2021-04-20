@@ -76,12 +76,34 @@ def create_observation(obj):
     print(f"Observation {observation_obj.id} created.")
 
 
+def create_condition_occurence(obj):
+    person = Person.objects.get(person_id=obj["person_id"])
+    condition_occ_obj = ConditionOccurrence(condition_occurrence_id=obj["condition_occurrence_id"], person=person)
+    condition_occ_obj.condition_concept = Concept.objects.get(concept_id=obj["condition_concept_id"])
+    text_fields = ["condition_start_date", "condition_start_datetime", "condition_end_date", "condition_end_datetime",
+                   "stop_reason", "condition_source_value", "condition_status_source_value"]
+    for field in text_fields:
+        if field in obj and obj[field] != "":
+            condition_occ_obj.__dict__[field] = obj[field]
+    condition_occ_obj.condition_type_concept = Concept.objects.get(concept_id=obj["condition_type_concept_id"])
+
+    # FKs
+    # condition_occ_obj.provider = Provider.objects.get(provider_id=obj["provider_id"])
+    # condition_occ_obj.visit_occurrence = VisitOccurrence.objects.get(visit_occurrence_id=obj["visit_occurrence_id"])
+    # condition_occ_obj.visit_detail = VisitDetail.objects.get(visit_detail_id=obj["visit_detail_id"])
+
+    condition_occ_obj.condition_source_concept = Concept.objects.get(concept_id=obj["condition_source_concept_id"])
+    condition_occ_obj.save()
+    print(f"Condition occurrence {condition_occ_obj.id} created.")
+
+
 def ingest_generic(file, data_type):
     file_type = file.split(".")[-1]
 
     datatypes = {
         "person": create_person,
         "observation": create_observation,
+        "condition_occurrence": create_condition_occurence,
     }
 
     if file_type == "csv":

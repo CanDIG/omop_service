@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'data_tables.apps.DataTablesConfig',
+    'django_filters',
     'rest_framework',
 ]
 

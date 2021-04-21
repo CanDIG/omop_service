@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from . import models as models
 from . import serializers as serializers
+from .filters import PersonFilter, ConditionOccurrenceFilter
 from .ingestion import ingest_generic
 
 
@@ -32,8 +33,7 @@ class PersonViewSet(GenericModelViewSet):
     queryset = models.Person.objects.all().order_by("id")
     serializer_class = serializers.PersonSerializer
     filter_backends = [DjangoFilterBackend]
-    # TODO filters
-    # filter_class = filters.PersonFilter
+    filterset_class = PersonFilter
 
 
 class ConditionOccurrenceViewSet(GenericModelViewSet):
@@ -46,8 +46,7 @@ class ConditionOccurrenceViewSet(GenericModelViewSet):
     queryset = models.ConditionOccurrence.objects.all().order_by("id")
     serializer_class = serializers.ConditionOccurrenceSerializer
     filter_backends = [DjangoFilterBackend]
-    # TODO filters
-    # filter_class = filters.ConditionOccurrenceFilter
+    filter_class = ConditionOccurrenceFilter
 
 
 class ProcedureOccurrenceViewSet(GenericModelViewSet):
@@ -132,6 +131,7 @@ def overview(request):
     persons_gender_counter = Counter()
 
     conditions_counter = Counter()
+    condition_type_counter = Counter()
     observations_counter = Counter()
     measurements_counter = Counter()
     specimens_counter = Counter()
@@ -148,6 +148,7 @@ def overview(request):
         for c in person.conditionoccurrence_set.all():
             conditions.add(c.id)
             conditions_counter.update((c.condition_concept.concept_name,))
+            condition_type_counter.update((c.condition_type_concept.concept_name,))
 
         for ob in person.observation_set.all():
             observations.add(ob.id)
@@ -164,22 +165,23 @@ def overview(request):
     return Response({
         "persons": {
             "count": persons.count(),
-            "sex": dict(persons_gender_counter)
+            "gender": dict(persons_gender_counter)
         },
         "conditions": {
             "count": len(conditions),
-            "condition_concept": dict(conditions_counter)
+            "condition": dict(conditions_counter),
+            "condition_type": dict(condition_type_counter)
         },
         "observations": {
             "count": len(observations),
-            "observation_concept": dict(observations_counter)
+            "observation": dict(observations_counter)
         },
         "measurements": {
             "count": len(measurements),
-            "measurement_concept": dict(measurements_counter)
+            "measurement": dict(measurements_counter)
         },
         "specimens": {
             "count": len(specimens),
-            "specimen_concept": dict(specimens_counter)
+            "specimen": dict(specimens_counter)
         }
     })

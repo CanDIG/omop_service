@@ -4,6 +4,7 @@ from rest_framework import viewsets, pagination
 from rest_framework.settings import api_settings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 
 from . import models as models
@@ -131,6 +132,7 @@ PERSON_PREFETCH = (
 )
 
 
+@cache_page(60 * 60 * 2)
 @api_view(["GET"])
 def overview(request):
 

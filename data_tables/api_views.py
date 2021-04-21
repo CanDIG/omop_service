@@ -143,8 +143,11 @@ def overview(request):
     conditions_counter = Counter()
     condition_type_counter = Counter()
     observations_counter = Counter()
+    observation_type_counter = Counter()
     measurements_counter = Counter()
+    measurement_type_counter = Counter()
     specimens_counter = Counter()
+    specimen_type_counter = Counter()
 
     conditions = set()
     observations = set()
@@ -163,14 +166,17 @@ def overview(request):
         for ob in person.observation_set.all():
             observations.add(ob.id)
             observations_counter.update((ob.observation_concept.concept_name,))
+            observation_type_counter.update((ob.observation_type_concept.concept_name,))
 
         for m in person.measurement_set.all():
             measurements.add(m.id)
             measurements_counter.update((m.measurement_concept.concept_name,))
+            measurement_type_counter.update((m.measurement_type_concept.concept_name,))
 
         for s in person.specimen_set.all():
             specimens.add(s.id)
             specimens_counter.update((s.specimen_concept.concept_name,))
+            specimen_type_counter.update((s.specimen_type_concept.concept_name,))
 
     return Response({
         "persons": {
@@ -184,14 +190,17 @@ def overview(request):
         },
         "observations": {
             "count": len(observations),
-            "observation": dict(observations_counter)
+            "observation": dict(observations_counter),
+            "observation_type": dict(observation_type_counter)
         },
         "measurements": {
             "count": len(measurements),
-            "measurement": dict(measurements_counter)
+            "measurement": dict(measurements_counter),
+            "measurement_type": dict(measurement_type_counter)
         },
         "specimens": {
             "count": len(specimens),
-            "specimen": dict(specimens_counter)
+            "specimen": dict(specimens_counter),
+            "specimen_type": dict(specimen_type_counter)
         }
     })

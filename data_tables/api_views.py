@@ -105,6 +105,14 @@ class SpecimenViewSet(GenericModelViewSet):
     # filter_class = filters.SpecimenFilter
 
 
+@api_view(["GET"])
+def main(request):
+    return Response({
+        "name": "OMOP Service",
+        "description": "OMOP Service is an API service on top of the OMOP-based database."
+    })
+
+
 @api_view(["POST"])
 def ingest(request):
     file = request.data["file"]

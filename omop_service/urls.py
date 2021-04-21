@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from data_tables.api_views import main
 
 urlpatterns = [
+    path('', main),
     path('admin/', admin.site.urls),
     # REST framework's login and logout views
     # path('api-auth/', include('rest_framework.urls'))

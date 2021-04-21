@@ -97,6 +97,16 @@ def create_condition_occurence(obj):
     print(f"Condition occurrence {condition_occ_obj.id} created.")
 
 
+def create_measurement(obj):
+    person = Person.objects.get(person_id=obj["person_id"])
+    measurement_obj = Measurement(measurement_id=obj["measurement_id"], person=person)
+    measurement_obj.measurement_concept = Concept.objects.get(concept_id=obj["measurement_concept_id"])
+    # TODO the rest of the fields
+    measurement_obj.measurement_type_concept = Concept.objects.get(concept_id=obj["measurement_type_concept_id"])
+    measurement_obj.save()
+    print(f"Measurement {measurement_obj.id} created.")
+
+
 def ingest_generic(file, data_type):
     file_type = file.split(".")[-1]
 
@@ -104,6 +114,7 @@ def ingest_generic(file, data_type):
         "person": create_person,
         "observation": create_observation,
         "condition_occurrence": create_condition_occurence,
+        "measurement": create_measurement
     }
 
     if file_type == "csv":

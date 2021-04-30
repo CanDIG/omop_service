@@ -5,7 +5,7 @@ PERSON_SCHEMA = {
         "person_id": {
             "type": "string"
         },
-        "gender_concept": {
+        "gender_concept_id": {
             "type": "string"
         },
         "year_of_birth": {
@@ -23,10 +23,10 @@ PERSON_SCHEMA = {
         "death_datetime": {
             "type": "string"
         },
-        "race_concept": {
+        "race_concept_id": {
             "type": "string"
         },
-        "ethnicity_concept": {
+        "ethnicity_concept_id": {
             "type": "string"
         },
         "location": {
@@ -44,19 +44,19 @@ PERSON_SCHEMA = {
         "gender_source_value": {
             "type": "string"
         },
-        "gender_source_concept": {
+        "gender_source_concept_id": {
             "type": "string"
         },
         "race_source_value": {
             "type": "string"
         },
-        "race_source_concept": {
+        "race_source_concept_id": {
             "type": "string"
         },
         "ethnicity_source_value": {
             "type": "string"
         },
-        "ethnicity_source_concept": {
+        "ethnicity_source_concept_id": {
             "type": "string"
         },
     },
@@ -73,7 +73,7 @@ OBSERVATION_SCHEMA = {
         "person": {
             "type": "string"
         },
-        "observation_concept": {
+        "observation_concept_id": {
             "type": "string",
         },
         "observation_date": {
@@ -82,7 +82,7 @@ OBSERVATION_SCHEMA = {
         "observation_datetime": {
             "type": "string"
         },
-        "observation_type_concept": {
+        "observation_type_concept_id": {
             "type": "string"
         },
         "value_as_number": {
@@ -91,13 +91,13 @@ OBSERVATION_SCHEMA = {
         "value_as_string": {
             "type": "string"
         },
-        "value_as_concept": {
+        "value_as_concept_id": {
             "type": "string"
         },
-        "qualifier_concept": {
+        "qualifier_concept_id": {
             "type": "string"
         },
-        "unit_concept": {
+        "unit_concept_id": {
             "type": "string"
         },
         "provider": {
@@ -112,7 +112,7 @@ OBSERVATION_SCHEMA = {
         "observation_source_value": {
             "type": "string"
         },
-        "observation_source_concept": {
+        "observation_source_concept_id": {
             "type": "string"
         },
         "unit_source_value": {
@@ -124,7 +124,7 @@ OBSERVATION_SCHEMA = {
         "observation_event": {
             "type": "string"
         },
-        "obs_event_field_concept": {
+        "obs_event_field_concept_id": {
             "type": "string"
         },
         "value_as_datetime": {
@@ -150,7 +150,7 @@ OBSERVATION_PERIOD_SCHEMA = {
         "observation_period_end_date": {
             "type": "string"
         },
-        "period_type_concept": {
+        "period_type_concept_id": {
             "type": "string"
         },
     },
@@ -167,7 +167,7 @@ MEASUREMENT_SCHEMA = {
         "person": {
             "type": "string"
         },
-        "measurement_concept": {
+        "measurement_concept_id": {
             "type": "string"
         },
         "measurement_date": {
@@ -176,19 +176,19 @@ MEASUREMENT_SCHEMA = {
         "measurement_datetime": {
             "type": "string"
         },
-        "measurement_type_concept": {
+        "measurement_type_concept_id": {
             "type": "string"
         },
-        "operator_concept": {
+        "operator_concept_id": {
             "type": "string"
         },
         "value_as_number": {
             "type": "number"
         },
-        "value_as_concept": {
+        "value_as_concept_id": {
             "type": "string"
         },
-        "unit_concept": {
+        "unit_concept_id": {
             "type": "string"
         },
         "range_low": {
@@ -209,7 +209,7 @@ MEASUREMENT_SCHEMA = {
         "measurement_source_value": {
             "type": "string"
         },
-        "measurement_source_concept": {
+        "measurement_source_concept_id": {
             "type": "string"
         },
         "unit_source_value": {
@@ -232,7 +232,7 @@ CONDITION_OCCURRENCE_SCHEMA = {
         "person": {
             "type": "string"
         },
-        "condition_concept": {
+        "condition_concept_id": {
             "type": "string"
         },
         "condition_start_date": {
@@ -247,10 +247,10 @@ CONDITION_OCCURRENCE_SCHEMA = {
         "condition_end_datetime": {
             "type": "string"
         },
-        "condition_type_concept": {
+        "condition_type_concept_id": {
             "type": "string"
         },
-        "condition_status_concept": {
+        "condition_status_concept_id": {
             "type": "string"
         },
         "stop_reason": {
@@ -268,7 +268,7 @@ CONDITION_OCCURRENCE_SCHEMA = {
         "condition_source_value": {
             "type": "string"
         },
-        "condition_source_concept": {
+        "condition_source_concept_id": {
             "type": "string"
         },
         "condition_status_source_value": {
@@ -288,10 +288,10 @@ SPECIMEN_SCHEMA = {
         "person": {
             "type": "string"
         },
-        "specimen_concept": {
+        "specimen_concept_id": {
             "type": "string"
         },
-        "specimen_type_concept": {
+        "specimen_type_concept_id": {
             "type": "string"
         },
         "specimen_date": {
@@ -303,13 +303,13 @@ SPECIMEN_SCHEMA = {
         "quantity": {
             "type": "number"
         },
-        "unit_concept": {
+        "unit_concept_id": {
             "type": "string"
         },
-        "anatomic_site_concept": {
+        "anatomic_site_concept_id": {
             "type": "string"
         },
-        "disease_status_concept": {
+        "disease_status_concept_id": {
             "type": "string"
         },
         "specimen_source_id": {

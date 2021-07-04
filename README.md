@@ -1,5 +1,7 @@
 # OMOP service
 
+![Test Status](https://github.com/CanDIG/omop_service/workflows/Test/badge.svg)
+
 The first prototype of the OMOP service based on the [OMOP Common Data Model](https://ohdsi.github.io/CommonDataModel/index.html)
 
 ## Installation

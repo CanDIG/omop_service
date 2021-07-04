@@ -1,5 +1,7 @@
 # OMOP service
 
+![Test Status](https://github.com/CanDIG/omop_service/workflows/Test/badge.svg)
+
 The first prototype of the OMOP service based on the [OMOP Common Data Model](https://ohdsi.github.io/CommonDataModel/index.html)
 
 ## Installation
@@ -23,11 +25,11 @@ The service is built with:
     DATABASES = {
          'default': {
              'ENGINE': 'django.db.backends.postgresql',
-             'NAME': 'omop',
-             'USER': 'admin',
-             'PASSWORD': 'admin',
-             'HOST': 'localhost',
-             'PORT': '5432',
+             'NAME': os.environ.get('POSTGRES_DATABASE', 'omop'),
+             'USER': os.environ.get('POSTGRES_USER', 'admin'),
+             'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'admin'),
+             'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+             'PORT': os.environ.get('POSTGRES_PORT', '5432'),
          }
      }
     ```

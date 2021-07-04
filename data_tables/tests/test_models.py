@@ -29,3 +29,27 @@ class ConceptTest(TestCase):
         self.assertIn("FEMALE", database_concept_names)
         self.assertIn("Gender", database_concept_names)
         self.assertIn("No matching concept", database_concept_names)
+
+
+class PersonTest(TestCase):
+    """ Test module for Person class """
+
+    def setUp(self):
+        self.concept_domain_gender = Concept.objects.create(**VALID_CONCEPT_DOMAIN_GENDER)
+        self.domain_gender = Domain.objects.create(**valid_domain_gender(self.concept_domain_gender))
+        self.vocabulary_gender = Vocabulary.objects.create(**VALID_VOCABULARY_GENDER)
+        self.concept_class_gender = ConceptClass.objects.create(**VALID_CONCEPT_CLASS_GENDER)
+        self.concept_none = Concept.objects.create(**VALID_CONCEPT_NONE)
+        self.concept_female = Concept.objects.create(
+            **valid_concept_female(
+                domain=self.domain_gender,
+                vocabulary=self.vocabulary_gender,
+                concept_class=self.concept_class_gender
+            )
+        )
+        self.person = Person.objects.create(**valid_person(concept_female=self.concept_female,
+                                                           concept_none=self.concept_none))
+
+    def test_person(self):
+        self.assertEqual(1, Person.objects.all().count())
+        self.assertEqual("8532", Person.objects.get(person_id="1").gender_concept_id)

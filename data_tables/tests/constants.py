@@ -43,20 +43,21 @@ def valid_concept_female(domain, vocabulary, concept_class):
     }
 
 
-VALID_PERSON = {
-    "person_id": "1",
-    "gender_concept_id": "8532",
-    "year_of_birth": 2000,
-    "month_of_birth": 7,
-    "day_of_birth": 5,
-    "birth_datetime": "2000-07-05 00:00:00",
-    "race_concept_id": "0",
-    "ethnicity_concept_id": "0",
-    "person_source_value": "0004bbbd-1e41-42b0-bd6e-fece53cc1817",
-    "gender_source_value": "F",
-    "gender_source_concept": "0",
-    "race_source_value": "white",
-    "race_source_concept": "0",
-    "ethnicity_source_value": "nonhispanic",
-    "ethnicity_source_concept": "0"
-}
+def valid_person(concept_female, concept_none):
+    return {
+        "person_id": "1",
+        "gender_concept_id": concept_female,
+        "year_of_birth": 2000,
+        "month_of_birth": 7,
+        "day_of_birth": 5,
+        "birth_datetime": "2000-07-05 00:00:00",
+        "race_concept_id": concept_none,
+        "ethnicity_concept_id": concept_none,
+        "person_source_value": "0004bbbd-1e41-42b0-bd6e-fece53cc1817",
+        "gender_source_value": "F",
+        "gender_source_concept": concept_none,
+        "race_source_value": "white",
+        "race_source_concept": concept_none,
+        "ethnicity_source_value": "nonhispanic",
+        "ethnicity_source_concept": concept_none
+    }

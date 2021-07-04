@@ -51,5 +51,20 @@ class PersonTest(TestCase):
                                                            concept_none=self.concept_none))
 
     def test_person(self):
+        # print(Person.objects.get(person_id="1").__dict__)
+        concept_none = Concept.objects.get(concept_id="0").concept_id
         self.assertEqual(1, Person.objects.all().count())
         self.assertEqual("8532", Person.objects.get(person_id="1").gender_concept_id)
+        self.assertEqual(2000, Person.objects.get(person_id="1").year_of_birth)
+        self.assertEqual(7, Person.objects.get(person_id="1").month_of_birth)
+        self.assertEqual(5, Person.objects.get(person_id="1").day_of_birth)
+        self.assertIsNotNone(Person.objects.get(person_id="1").birth_datetime)
+        self.assertEqual(concept_none, Person.objects.get(person_id="1").race_concept_id)
+        self.assertEqual(concept_none, Person.objects.get(person_id="1").ethnicity_concept_id)
+        self.assertEqual("0004bbbd-1e41-42b0-bd6e-fece53cc1817", Person.objects.get(person_id="1").person_source_value)
+        self.assertEqual("F", Person.objects.get(person_id="1").gender_source_value)
+        self.assertEqual(concept_none, Person.objects.get(person_id="1").gender_source_concept_id)
+        self.assertEqual("white", Person.objects.get(person_id="1").race_source_value)
+        self.assertEqual(concept_none, Person.objects.get(person_id="1").race_source_concept_id)
+        self.assertEqual("nonhispanic", Person.objects.get(person_id="1").ethnicity_source_value)
+        self.assertEqual(concept_none, Person.objects.get(person_id="1").ethnicity_source_concept_id)

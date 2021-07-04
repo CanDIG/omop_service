@@ -55,9 +55,9 @@ def valid_person(concept_female, concept_none):
         "ethnicity_concept_id": concept_none,
         "person_source_value": "0004bbbd-1e41-42b0-bd6e-fece53cc1817",
         "gender_source_value": "F",
-        "gender_source_concept": concept_none,
+        "gender_source_concept_id": concept_none,
         "race_source_value": "white",
-        "race_source_concept": concept_none,
+        "race_source_concept_id": concept_none,
         "ethnicity_source_value": "nonhispanic",
-        "ethnicity_source_concept": concept_none
+        "ethnicity_source_concept_id": concept_none
     }

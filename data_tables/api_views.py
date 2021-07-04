@@ -4,6 +4,7 @@ from rest_framework import viewsets, pagination
 from rest_framework.settings import api_settings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -22,6 +23,11 @@ class LargeResultsSetPagination(pagination.PageNumberPagination):
 class GenericModelViewSet(viewsets.ModelViewSet):
     renderer_classes = (*api_settings.DEFAULT_RENDERER_CLASSES, )
     pagination_class = LargeResultsSetPagination
+
+    # Cache page for the requested url for 2 hours
+    @method_decorator(cache_page(60 * 60 * 2))
+    def dispatch(self, *args, **kwargs):
+        return super(GenericModelViewSet, self).dispatch(*args, **kwargs)
 
 
 class PersonViewSet(GenericModelViewSet):

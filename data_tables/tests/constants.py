@@ -130,3 +130,25 @@ def valid_measurement(person, measurement_concept, measurement_type_concept, con
         "unit_source_value": "test unit source value",
         "value_source_value": "test value source value"
     }
+
+
+# SPECIMEN
+def valid_specimen(person, specimen_concept, specimen_type_concept, anatomic_site_concept, concept_none):
+    return {
+        "specimen_id": "1",
+        "person_id": person,
+        "specimen_concept_id": specimen_concept,
+        "specimen_type_concept_id": specimen_type_concept,
+        "specimen_date": "2017-06-05",
+        # TODO datetime tests
+        # "specimen_datetime": "2017-06-05 00:00:00",
+        "quantity": 1.93,
+        "unit_concept_id": concept_none,
+        "anatomic_site_concept_id": anatomic_site_concept,
+        "disease_status_concept_id": concept_none,
+        "specimen_source_id": "06",
+        "specimen_source_value": "19",
+        "unit_source_value": "23",
+        "anatomic_site_source_value": "31",
+        "disease_status_source_value": "46",
+    }

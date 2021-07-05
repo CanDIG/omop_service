@@ -115,8 +115,22 @@ class GenericTestCase(TestCase):
         cls.measurement_type_concept = Concept.objects.create(
             concept_id="5001", concept_name="Test ordered through EHR"
         )
+        # TODO why doesn't it take cls.person.id ?
         cls.measurement = Measurement.objects.create(**valid_measurement(
             cls.person, cls.measurement_concept, cls.measurement_type_concept, cls.concept_none.concept_id))
+
+        # for Specimen
+        cls.specimen_concept = Concept.objects.create(concept_id="4000623", concept_name="Bone marrow specimen")
+        cls.specimen_type_concept = Concept.objects.create(
+            concept_id="32856", concept_name="Lab"
+        )
+        cls.anatomic_site_concept = Concept.objects.create(
+            concept_id="4044353", concept_name="Alveolar process"
+        )
+        cls.specimen = Specimen.objects.create(**valid_specimen(
+            cls.person.id, cls.specimen_concept, cls.specimen_type_concept, cls.anatomic_site_concept,
+            cls.concept_none.concept_id
+        ))
 
     def test_person(self):
         self.assertEqual(1, Person.objects.all().count())
@@ -174,3 +188,24 @@ class GenericTestCase(TestCase):
         self.assertEqual(concept_none, measurement.measurement_source_concept_id)
         self.assertEqual("test unit source value", measurement.unit_source_value)
         self.assertEqual("test value source value", measurement.value_source_value)
+
+    def test_specimen(self):
+        concept_none = Concept.objects.get(concept_id="0").concept_id
+        self.assertEqual(1, Specimen.objects.all().count())
+        specimen = Specimen.objects.get(specimen_id="1")
+        self.assertEqual(self.person, specimen.person)
+        self.assertEqual(Concept.objects.get(concept_name="Bone marrow specimen").concept_id,
+                         specimen.specimen_concept_id)
+        self.assertEqual(Concept.objects.get(concept_name="Lab").concept_id,
+                         specimen.specimen_type_concept_id)
+        self.assertEqual(datetime.strptime("2017-06-05", "%Y-%m-%d").date(), specimen.specimen_date)
+        # TODO quantity
+        self.assertEqual(concept_none, specimen.unit_concept_id)
+        self.assertEqual(Concept.objects.get(concept_name="Alveolar process").concept_id,
+                         specimen.anatomic_site_concept_id)
+        self.assertEqual(concept_none, specimen.disease_status_concept_id)
+        self.assertEqual("06", specimen.specimen_source_id)
+        self.assertEqual("19", specimen.specimen_source_value)
+        self.assertEqual("23", specimen.unit_source_value)
+        self.assertEqual("31", specimen.anatomic_site_source_value)
+        self.assertEqual("46", specimen.disease_status_source_value)

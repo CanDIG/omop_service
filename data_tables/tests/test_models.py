@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.test import TestCase
 from .constants import *
 from ..models import *
@@ -68,3 +70,57 @@ class PersonTest(TestCase):
         self.assertEqual(concept_none, Person.objects.get(person_id="1").race_source_concept_id)
         self.assertEqual("nonhispanic", Person.objects.get(person_id="1").ethnicity_source_value)
         self.assertEqual(concept_none, Person.objects.get(person_id="1").ethnicity_source_concept_id)
+
+
+# Set up test data for the rest of the tests
+class GenericTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        """ Load initial data for all GenericTestCases """
+
+        # set up database with one Person
+        cls.concept_domain_gender = Concept.objects.create(**VALID_CONCEPT_DOMAIN_GENDER)
+        cls.domain_gender = Domain.objects.create(**valid_domain_gender(cls.concept_domain_gender))
+        cls.vocabulary_gender = Vocabulary.objects.create(**VALID_VOCABULARY_GENDER)
+        cls.concept_class_gender = ConceptClass.objects.create(**VALID_CONCEPT_CLASS_GENDER)
+        cls.concept_none = Concept.objects.create(**VALID_CONCEPT_NONE)
+        cls.concept_female = Concept.objects.create(
+            **valid_concept_female(
+                domain=cls.domain_gender,
+                vocabulary=cls.vocabulary_gender,
+                concept_class=cls.concept_class_gender
+            )
+        )
+        cls.person = Person.objects.create(**valid_person(concept_female=cls.concept_female,
+                                                          concept_none=cls.concept_none))
+        # for Observation
+        cls.observation_concept = Concept.objects.create(concept_id="38000276", concept_name="Problem list from EHR")
+        cls.observation_source_concept = Concept.objects.create(
+            concept_id="40481087", concept_name="Viral sinusitis"
+        )
+        cls.observation = Observation.objects.create(**valid_observation(
+            cls.person.id, cls.observation_concept, cls.concept_none.concept_id, cls.observation_source_concept))
+
+    def test_person(self):
+        self.assertEqual(1, Person.objects.all().count())
+
+    def test_observation(self):
+        concept_none = Concept.objects.get(concept_id="0").concept_id
+        self.assertEqual(1, Observation.objects.all().count())
+        observation = Observation.objects.get(observation_id="1")
+        self.assertEqual(concept_none, observation.observation_concept_id)
+        self.assertEqual(datetime.strptime("2019-08-29", "%Y-%m-%d").date(), observation.observation_date)
+        self.assertEqual("38000276", observation.observation_type_concept_id)
+        self.assertEqual(1.5, observation.value_as_number)
+        self.assertEqual("test value", observation.value_as_string)
+        self.assertEqual(concept_none, observation.value_as_concept_id)
+        self.assertEqual(concept_none, observation.qualifier_concept_id)
+        self.assertEqual(concept_none, observation.unit_concept_id)
+        self.assertEqual("444814009", observation.observation_source_value)
+        self.assertEqual("40481087", observation.observation_source_concept_id)
+        self.assertEqual("unit test value", observation.unit_source_value)
+        self.assertEqual("qualifier test value", observation.qualifier_source_value)
+        self.assertEqual(self.person, observation.person)
+
+

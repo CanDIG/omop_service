@@ -43,6 +43,7 @@ def valid_concept_female(domain, vocabulary, concept_class):
     }
 
 
+# PERSON
 def valid_person(concept_female, concept_none):
     return {
         "person_id": "1",
@@ -60,4 +61,25 @@ def valid_person(concept_female, concept_none):
         "race_source_concept_id": concept_none,
         "ethnicity_source_value": "nonhispanic",
         "ethnicity_source_concept_id": concept_none
+    }
+
+
+# OBSERVATION
+
+def valid_observation(person, observation_concept, concept_none, observation_source_concept):
+    return {
+        "observation_id": "1",
+        "person_id": person,
+        "observation_concept_id": concept_none,
+        "observation_date": "2019-08-29",
+        "observation_type_concept_id": observation_concept,
+        "value_as_number": 1.5,
+        "value_as_string": "test value",
+        "value_as_concept_id": concept_none,
+        "qualifier_concept_id": concept_none,
+        "unit_concept_id": concept_none,
+        "observation_source_value": "444814009",
+        "observation_source_concept_id": observation_source_concept,
+        "unit_source_value": "unit test value",
+        "qualifier_source_value": "qualifier test value"
     }

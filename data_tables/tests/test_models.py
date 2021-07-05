@@ -102,6 +102,14 @@ class GenericTestCase(TestCase):
         cls.observation = Observation.objects.create(**valid_observation(
             cls.person.id, cls.observation_concept, cls.concept_none.concept_id, cls.observation_source_concept))
 
+        # for Condition Occurence
+        cls.condition_concept = Concept.objects.create(concept_id="260139", concept_name="Acute bronchitis")
+        cls.condition_type_concept = Concept.objects.create(
+            concept_id="32020", concept_name="EHR encounter diagnosis"
+        )
+        cls.condition_occurrence = ConditionOccurrence.objects.create(**valid_condition_occurrence(
+            cls.person.id, cls.condition_concept, cls.condition_type_concept, cls.concept_none.concept_id))
+
     def test_person(self):
         self.assertEqual(1, Person.objects.all().count())
 
@@ -124,4 +132,18 @@ class GenericTestCase(TestCase):
         self.assertEqual(self.person, observation.person)
         self.assertEqual("Viral sinusitis", observation.observation_source_concept.concept_name)
 
-
+    def test_condition_occurrence(self):
+        concept_none = Concept.objects.get(concept_id="0").concept_id
+        self.assertEqual(1, ConditionOccurrence.objects.all().count())
+        condition_occurrence = ConditionOccurrence.objects.get(condition_occurrence_id="1")
+        self.assertEqual(self.person, condition_occurrence.person)
+        self.assertEqual(Concept.objects.get(concept_name="Acute bronchitis").concept_id,
+                         condition_occurrence.condition_concept_id)
+        self.assertEqual(datetime.strptime("2017-06-05", "%Y-%m-%d").date(), condition_occurrence.condition_start_date)
+        self.assertEqual(datetime.strptime("2017-06-12", "%Y-%m-%d").date(), condition_occurrence.condition_end_date)
+        self.assertEqual(Concept.objects.get(concept_name="EHR encounter diagnosis").concept_id,
+                         condition_occurrence.condition_type_concept_id)
+        self.assertEqual("test stop reason", condition_occurrence.stop_reason)
+        self.assertEqual("195662009", condition_occurrence.condition_source_value)
+        self.assertEqual(concept_none, condition_occurrence.condition_source_concept_id)
+        self.assertEqual("unknown", condition_occurrence.condition_status_source_value)

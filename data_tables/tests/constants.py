@@ -65,7 +65,6 @@ def valid_person(concept_female, concept_none):
 
 
 # OBSERVATION
-
 def valid_observation(person, observation_concept, concept_none, observation_source_concept):
     return {
         "observation_id": "1",
@@ -82,4 +81,26 @@ def valid_observation(person, observation_concept, concept_none, observation_sou
         "observation_source_concept_id": observation_source_concept,
         "unit_source_value": "unit test value",
         "qualifier_source_value": "qualifier test value"
+    }
+
+
+# CONDITION OCCURENCE
+def valid_condition_occurrence(person, condition_concept, condition_type_concept, concept_none):
+    return {
+        "condition_occurrence_id": "1",
+        "person_id": person,
+        "condition_concept_id": condition_concept,
+        "condition_start_date": "2017-06-05",
+        # TODO datetime tests
+        # "condition_start_datetime": "2017-06-05 00:00:00",
+        "condition_end_date": "2017-06-12",
+        # "condition_end_datetime": "2017-06-12 00:00:00",
+        "condition_type_concept_id": condition_type_concept,
+        "stop_reason": "test stop reason",
+        # "provider_id": "",
+        # "visit_occurrence_id": "7",
+        # "visit_detail_id": "0",
+        "condition_source_value": "195662009",
+        "condition_source_concept_id": concept_none,
+        "condition_status_source_value": "unknown"
     }

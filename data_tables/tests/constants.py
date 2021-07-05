@@ -43,6 +43,7 @@ def valid_concept_female(domain, vocabulary, concept_class):
     }
 
 
+# PERSON
 def valid_person(concept_female, concept_none):
     return {
         "person_id": "1",
@@ -60,4 +61,94 @@ def valid_person(concept_female, concept_none):
         "race_source_concept_id": concept_none,
         "ethnicity_source_value": "nonhispanic",
         "ethnicity_source_concept_id": concept_none
+    }
+
+
+# OBSERVATION
+def valid_observation(person, observation_concept, concept_none, observation_source_concept):
+    return {
+        "observation_id": "1",
+        "person_id": person,
+        "observation_concept_id": concept_none,
+        "observation_date": "2019-08-29",
+        "observation_type_concept_id": observation_concept,
+        "value_as_number": 1.5,
+        "value_as_string": "test value",
+        "value_as_concept_id": concept_none,
+        "qualifier_concept_id": concept_none,
+        "unit_concept_id": concept_none,
+        "observation_source_value": "444814009",
+        "observation_source_concept_id": observation_source_concept,
+        "unit_source_value": "unit test value",
+        "qualifier_source_value": "qualifier test value"
+    }
+
+
+# CONDITION OCCURENCE
+def valid_condition_occurrence(person, condition_concept, condition_type_concept, concept_none):
+    return {
+        "condition_occurrence_id": "1",
+        "person_id": person,
+        "condition_concept_id": condition_concept,
+        "condition_start_date": "2017-06-05",
+        # TODO datetime tests
+        # "condition_start_datetime": "2017-06-05 00:00:00",
+        "condition_end_date": "2017-06-12",
+        # "condition_end_datetime": "2017-06-12 00:00:00",
+        "condition_type_concept_id": condition_type_concept,
+        "stop_reason": "test stop reason",
+        # "provider_id": "",
+        # "visit_occurrence_id": "7",
+        # "visit_detail_id": "0",
+        "condition_source_value": "195662009",
+        "condition_source_concept_id": concept_none,
+        "condition_status_source_value": "unknown"
+    }
+
+
+# MEASUREMENT
+def valid_measurement(person, measurement_concept, measurement_type_concept, concept_none):
+    return {
+        "measurement_id": "1",
+        "person": person,
+        "measurement_concept_id": measurement_concept,
+        "measurement_date": "2017-06-05",
+        # TODO datetime tests
+        # "measurement_datetime": "2017-06-05 00:00:00",
+        "measurement_type_concept_id": measurement_type_concept,
+        "operator_concept_id": concept_none,
+        "value_as_number": 1.5,
+        "value_as_concept_id": concept_none,
+        "unit_concept_id": concept_none,
+        "range_low": 2.1,
+        "range_high": 2.9,
+        # "provider": "",
+        # "visit_occurrence": "7",
+        # "visit_detail": "0",
+        "measurement_source_value": "117015009",
+        "measurement_source_concept_id": concept_none,
+        "unit_source_value": "test unit source value",
+        "value_source_value": "test value source value"
+    }
+
+
+# SPECIMEN
+def valid_specimen(person, specimen_concept, specimen_type_concept, anatomic_site_concept, concept_none):
+    return {
+        "specimen_id": "1",
+        "person_id": person,
+        "specimen_concept_id": specimen_concept,
+        "specimen_type_concept_id": specimen_type_concept,
+        "specimen_date": "2017-06-05",
+        # TODO datetime tests
+        # "specimen_datetime": "2017-06-05 00:00:00",
+        "quantity": 1.93,
+        "unit_concept_id": concept_none,
+        "anatomic_site_concept_id": anatomic_site_concept,
+        "disease_status_concept_id": concept_none,
+        "specimen_source_id": "06",
+        "specimen_source_value": "19",
+        "unit_source_value": "23",
+        "anatomic_site_source_value": "31",
+        "disease_status_source_value": "46",
     }

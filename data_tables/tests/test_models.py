@@ -110,6 +110,14 @@ class GenericTestCase(TestCase):
         cls.condition_occurrence = ConditionOccurrence.objects.create(**valid_condition_occurrence(
             cls.person.id, cls.condition_concept, cls.condition_type_concept, cls.concept_none.concept_id))
 
+        # for Measurement
+        cls.measurement_concept = Concept.objects.create(concept_id="4024958", concept_name="Throat culture")
+        cls.measurement_type_concept = Concept.objects.create(
+            concept_id="5001", concept_name="Test ordered through EHR"
+        )
+        cls.measurement = Measurement.objects.create(**valid_measurement(
+            cls.person, cls.measurement_concept, cls.measurement_type_concept, cls.concept_none.concept_id))
+
     def test_person(self):
         self.assertEqual(1, Person.objects.all().count())
 
@@ -147,3 +155,22 @@ class GenericTestCase(TestCase):
         self.assertEqual("195662009", condition_occurrence.condition_source_value)
         self.assertEqual(concept_none, condition_occurrence.condition_source_concept_id)
         self.assertEqual("unknown", condition_occurrence.condition_status_source_value)
+
+    def test_measurement(self):
+        concept_none = Concept.objects.get(concept_id="0").concept_id
+        self.assertEqual(1, Measurement.objects.all().count())
+        measurement = Measurement.objects.get(measurement_id="1")
+        self.assertEqual(self.person, measurement.person)
+        self.assertEqual(Concept.objects.get(concept_name="Throat culture").concept_id,
+                         measurement.measurement_concept_id)
+        self.assertEqual(datetime.strptime("2017-06-05", "%Y-%m-%d").date(), measurement.measurement_date)
+        self.assertEqual(Concept.objects.get(concept_name="Test ordered through EHR").concept_id,
+                         measurement.measurement_type_concept_id)
+        self.assertEqual(concept_none, measurement.operator_concept_id)
+        self.assertEqual(1.5, measurement.value_as_number)
+        self.assertEqual(concept_none, measurement.value_as_concept_id)
+        self.assertEqual(concept_none, measurement.unit_concept_id)
+        self.assertEqual("117015009", measurement.measurement_source_value)
+        self.assertEqual(concept_none, measurement.measurement_source_concept_id)
+        self.assertEqual("test unit source value", measurement.unit_source_value)
+        self.assertEqual("test value source value", measurement.value_source_value)

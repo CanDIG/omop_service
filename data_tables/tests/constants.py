@@ -104,3 +104,29 @@ def valid_condition_occurrence(person, condition_concept, condition_type_concept
         "condition_source_concept_id": concept_none,
         "condition_status_source_value": "unknown"
     }
+
+
+# MEASUREMENT
+def valid_measurement(person, measurement_concept, measurement_type_concept, concept_none):
+    return {
+        "measurement_id": "1",
+        "person": person,
+        "measurement_concept_id": measurement_concept,
+        "measurement_date": "2017-06-05",
+        # TODO datetime tests
+        # "measurement_datetime": "2017-06-05 00:00:00",
+        "measurement_type_concept_id": measurement_type_concept,
+        "operator_concept_id": concept_none,
+        "value_as_number": 1.5,
+        "value_as_concept_id": concept_none,
+        "unit_concept_id": concept_none,
+        "range_low": 2.1,
+        "range_high": 2.9,
+        # "provider": "",
+        # "visit_occurrence": "7",
+        # "visit_detail": "0",
+        "measurement_source_value": "117015009",
+        "measurement_source_concept_id": concept_none,
+        "unit_source_value": "test unit source value",
+        "value_source_value": "test value source value"
+    }

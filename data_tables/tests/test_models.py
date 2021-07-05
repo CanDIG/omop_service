@@ -122,5 +122,6 @@ class GenericTestCase(TestCase):
         self.assertEqual("unit test value", observation.unit_source_value)
         self.assertEqual("qualifier test value", observation.qualifier_source_value)
         self.assertEqual(self.person, observation.person)
+        self.assertEqual("Viral sinusitis", observation.observation_source_concept.concept_name)
 
 
